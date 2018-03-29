@@ -20,6 +20,7 @@
 #		$VPApprovalAmount - The highest dollar amount that a VP can approve.
 #
 #		$RAPEmail - Email address that the RAP service will use.
+#		$RAPUser - RAP user short name.
 #		$RAPLogin - The username that the RAP service will use to login to email.
 #		$RAPPass - The password that the RAP service will use to login to email.
 #		$Pop3Server - The IP address or DNS name of the Pop3 server used to receive email.
@@ -38,7 +39,6 @@ print_log "Sourcing variables"
  source /usr/local/osmosix/service/utils/cfgutil.sh
  source /usr/local/osmosix/service/utils/agent_util.sh
  print_log "$(env)"
- env
 }
 sourceVars
 
@@ -73,7 +73,7 @@ function setupPrereqs() {
 
 ## Setup Mutt
 function setupMutt() {
-  print_log "Setting up Mutt"
+ print_log "Setting up Mutt"
  touch $MAIL
  chmod 660 $MAIL
  chown `whoami`:mail $MAIL
@@ -81,12 +81,13 @@ function setupMutt() {
  touch ~/.mutt/cache/headers
  touch ~/.mutt/cache/bodies
  touch ~/.mutt/certificates
+ echo "" > ~/.muttrc
 cat <<EOF > ~/.muttrc
-set from = "prgrimm04@gmail.com"
-set realname = "Parker Grimm"
-set smtp_url = "smtp://prgrimm04@smtp.gmail.com:587/"
+set from = $RAPLogin
+set realname = "$RAPUser"
+set smtp_url = "smtp://$RAPUser@smtp.gmail.com:587/"
 set smtp_pass = $RAPPass
-set imap_user = "prgrimm04@gmail.com"
+set imap_user = $RAPLogin
 set imap_pass = $RAPPass
 set folder = "imaps://imap.gmail.com:993"
 set spoolfile = "+INBOX"
@@ -99,7 +100,33 @@ set message_cachedir=~/.mutt/cache/bodies
 set certificate_file=~/.mutt/certificates
 set move = no
 EOF
+ print_log "$(cat ~/.muttrc)"
  print_log "Mutt setup complete"
+}
+
+## Setup Fetchmail
+function setupFetchmail() {
+ print_log "Setting up Fetchmail"
+ mkdir ~/.fetchmail
+ echo "" > ~/.fetchmailrc
+cat <<EOF > ~/.fetchmailrc
+# set username
+set postmaster `whoami`
+# set polling time (5 minutes)
+# set daemon 600
+poll pop.gmail.com with proto POP3
+   user $RAPLogin there with password $RAPPass is `whoami` here options ssl
+EOF
+ print_log "$(cat ~/.fetchmailrc)"
+ print_log "Fetchmail setup complete"
+}
+
+## Test SMTP
+function testSMTP () {
+ print_log "Testing SMTP"
+  print_log "$(echo \"Everything is OK\" \| mutt -s \"TEST email - mutt SMTP\" $ArchEmail)"
+ echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" $ArchEmail
+ print_log "SMTP testing complete"
 }
 
 # Cases
@@ -109,6 +136,8 @@ case $cmd in
 		sourceVars
 		setupPrereqs
 		setupMutt
+		setupFetchmail
+		testSMTP
 		echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" jgrimm73@gmail.com
 		executionStatus
 		;;
