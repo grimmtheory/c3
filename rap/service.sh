@@ -30,15 +30,17 @@
 #
 
 # Source variables
+function sourceVars() {
 print_log "Sourcing variables"
-source /usr/local/osmosix/etc/.osmosix.sh
-source /usr/local/osmosix/etc/userenv
-source /usr/local/osmosix/service/utils/cfgutil.sh
-source /usr/local/osmosix/service/utils/agent_util.sh
-
-# Output env locally and to the log (for debug)
-print_log "$(env)"
-env
+ source /utils.sh
+ source /usr/local/osmosix/etc/.osmosix.sh
+ source /usr/local/osmosix/etc/userenv
+ source /usr/local/osmosix/service/utils/cfgutil.sh
+ source /usr/local/osmosix/service/utils/agent_util.sh
+ print_log "$(env)"
+ env
+}
+sourceVars
 
 # Set cmd to $1 for the start, stop, resume, etc. cases
 cmd=$1
@@ -104,7 +106,7 @@ EOF
 case $cmd in
 	start)
 		print_log "Executing Service.."
-		print_log "$(env)"
+		sourceVars
 		setupPrereqs
 		setupMutt
 		echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" jgrimm73@gmail.com
