@@ -101,6 +101,7 @@ EOF
 case $cmd in
 	start)
 		print_log "Executing Service.."
+		muttSetup
 		echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" jgrimm73@gmail.com
 		executionStatus
 		;;
