@@ -62,25 +62,6 @@ if grep -q "Error" "$FILE"; then
 fi
 }
 
-## Debug
-function doDebug() {
- print_log "Starting Debugging"
- Dfile="$HOME/debug.txt"
- touch $Dfile
- echo "Install nmap" >> $Dfile
- yum -y --skip-broken install nmap | tail -n 10 >> $Dfile
- echo "Mutt check" >> $Dfile
- mutt -v >> $Dfile
- testSMTP >> $Dfile
- echo "Fetchmail check" >> $Dfile
- fetchmail -v >> $Dfile
- mail -H | tail -n 5 >> $Dfile
- echo "Network check" >> $Dfile
- nmap -P0 -p 25 $SMTPServer >> $Dfile
- nmap -P0 -p 110 $Pop3Server >> $Dfile
- print_log "$(cat $Dfile)"
-}
-
 ## Setup prereqs
 function setupPrereqs() {
  print_log "Installing Prereqs"
@@ -146,6 +127,26 @@ function testSMTP () {
   print_log "$(echo \"Everything is OK\" \| mutt -s \"TEST email - mutt SMTP\" $ArchEmail)"
  echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" $ArchEmail
  print_log "SMTP testing complete"
+}
+
+## Debug
+function doDebug() {
+ print_log "Start Debugging"
+ Dfile="$HOME/debug.txt"
+ echo "" > $Dfile
+ echo "Install nmap" >> $Dfile
+ yum -y --skip-broken install nmap | tail -n 10 >> $Dfile
+ echo "Mutt check" >> $Dfile
+ mutt -v >> $Dfile
+ testSMTP >> $Dfile
+ echo "Fetchmail check" >> $Dfile
+ fetchmail | tail -n 10 >> $Dfile
+ mail -H | tail -n 5 >> $Dfile
+ echo "Network check" >> $Dfile
+ nmap -P0 -p 25 $SMTPServer >> $Dfile
+ nmap -P0 -p 110 $Pop3Server >> $Dfile
+ cat $Dfile
+ print_log "$(cat $Dfile)"
 }
 
 # Cases
