@@ -65,11 +65,11 @@ fi
 ## Debug
 function doDebug() {
  print_log "Starting Debugging"
- Dfile = ~/debug.txt
+ Dfile=~/debug.txt
  echo "Install nmap" >> $Dfile
- yum -y --skip-broken install nmap
+ yum -y --skip-broken install nmap | tail -n 10 >> $Dfile
  echo "Mutt check" >> $Dfile
- mutt -v > $Dfile
+ mutt -v >> $Dfile
  testSMTP >> $Dfile
  echo "Fetchmail check" >> $Dfile
  fetchmail -v >> $Dfile
@@ -157,8 +157,6 @@ case $cmd in
 		setupFetchmail
 		testSMTP
 		doDebug
-		cat ~/debug.txt
-		print_log $(cat ~/debug.txt)
 		executionStatus
 		;;
 	stop)
