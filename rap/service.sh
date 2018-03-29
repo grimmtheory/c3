@@ -132,21 +132,19 @@ function testSMTP () {
 ## Debug
 function doDebug() {
  print_log "Start Debugging"
- Dfile="$HOME/debug.txt"
- echo "" > $Dfile
- echo "Install nmap" >> $Dfile
- yum -y --skip-broken install nmap | tail -n 10 >> $Dfile
- echo "Mutt check" >> $Dfile
- mutt -v >> $Dfile
- testSMTP >> $Dfile
- echo "Fetchmail check" >> $Dfile
- fetchmail | tail -n 10 >> $Dfile
- mail -H | tail -n 5 >> $Dfile
- echo "Network check" >> $Dfile
- nmap -P0 -p 25 $SMTPServer >> $Dfile
- nmap -P0 -p 110 $Pop3Server >> $Dfile
- cat $Dfile
- print_log "$(cat $Dfile)"
+ echo "" > ~/debug.txt
+ echo "Install nmap" >> ~/debug.txt
+ yum -y --skip-broken install nmap >> ~/debug.txt
+ echo "Mutt check" >> ~/debug.txt
+ mutt -v >> ~/debug.txt
+ testSMTP >> ~/debug.txt
+ echo "Fetchmail check" >> ~/debug.txt
+ fetchmail >> ~/debug.txt
+ mail -H >> ~/debug.txt
+ echo "Network check" >> ~/debug.txt
+ nmap -P0 -p 25 $SMTPServer >> ~/debug.txt
+ nmap -P0 -p 110 $Pop3Server >> ~/debug.txt
+ print_log "$(cat ~/debug.txt)"
 }
 
 # Cases
