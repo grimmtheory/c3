@@ -85,7 +85,7 @@ function setupMutt() {
 cat <<EOF > ~/.muttrc
 set from = $RAPLogin
 set realname = "$RAPUser"
-set smtp_url = "smtp://$RAPUser@smtp.gmail.com:587/"
+set smtp_url = "smtp://$RAPUser@$SMTPServer:587/"
 set smtp_pass = $RAPPass
 set imap_user = $RAPLogin
 set imap_pass = $RAPPass
@@ -114,7 +114,7 @@ cat <<EOF > ~/.fetchmailrc
 set postmaster `whoami`
 # set polling time (5 minutes)
 # set daemon 600
-poll pop.gmail.com with proto POP3
+poll $Pop3Server with proto POP3
    user $RAPLogin there with password $RAPPass is `whoami` here options ssl
 EOF
  print_log "$(cat ~/.fetchmailrc)"
