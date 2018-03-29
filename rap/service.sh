@@ -65,7 +65,8 @@ fi
 ## Debug
 function doDebug() {
  print_log "Starting Debugging"
- Dfile=~/debug.txt
+ Dfile="$HOME/debug.txt"
+ touch $Dfile
  echo "Install nmap" >> $Dfile
  yum -y --skip-broken install nmap | tail -n 10 >> $Dfile
  echo "Mutt check" >> $Dfile
