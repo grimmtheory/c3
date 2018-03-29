@@ -70,7 +70,7 @@ function setupPrereqs() {
 }
 
 ## Setup Mutt
-function muttSetup() {
+function setupMutt() {
   print_log "Setting up Mutt"
  touch $MAIL
  chmod 660 $MAIL
@@ -106,7 +106,7 @@ case $cmd in
 		print_log "Executing Service.."
 		print_log "$(env)"
 		setupPrereqs
-		muttSetup
+		setupMutt
 		echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" jgrimm73@gmail.com
 		executionStatus
 		;;
