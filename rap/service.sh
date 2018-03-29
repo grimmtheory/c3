@@ -24,6 +24,7 @@
 #		$RAPLogin - The username that the RAP service will use to login to email.
 #		$RAPPass - The password that the RAP service will use to login to email.
 #		$Pop3Server - The IP address or DNS name of the Pop3 server used to receive email.
+#		$IMAPServer - The IP address or DNS name of the IMAP server used to receive email.
 #		$SMTPServer - The IP address or DNS name of the SMTP server used to send email.
 # 
 #		cmd for our case statement is the first parameter passed in is either start or stop
@@ -40,7 +41,6 @@ print_log "Sourcing variables"
  source /usr/local/osmosix/service/utils/agent_util.sh
  print_log "$(env)"
 }
-sourceVars
 
 # Set cmd to $1 for the start, stop, resume, etc. cases
 cmd=$1
@@ -66,7 +66,7 @@ fi
 function setupPrereqs() {
  print_log "Installing Prereqs"
  yum -y --skip-broken update
- yum -y --skip-broken install mutt fetchmail postfix openssl cyrus-sasl cyrus-sasl-plain \
+ yum -y --skip-broken install mutt fetchmail mailcap procmail postfix openssl openssl-devel wget ncurses-devel perl vim cyrus-sasl cyrus-sasl-plain \
  cyrus-sasl-md5 cyrus-sasl-devel cyrus-sasl-gssapi mailx
  print_log "Prereqs install complete"
 }
@@ -89,7 +89,7 @@ set smtp_url = "smtp://$RAPUser@$SMTPServer:587/"
 set smtp_pass = $RAPPass
 set imap_user = $RAPLogin
 set imap_pass = $RAPPass
-set folder = "imaps://imap.gmail.com:993"
+set folder = "imaps://$IMAPServer:993"
 set spoolfile = "+INBOX"
 set timeout = 300
 set imap_keepalive = 300
@@ -138,7 +138,6 @@ case $cmd in
 		setupMutt
 		setupFetchmail
 		testSMTP
-		echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" $ArchEmail
 		executionStatus
 		;;
 	stop)
