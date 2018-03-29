@@ -1,0 +1,41 @@
+yum -y --skip-broken update
+yum -y --skip-broken install mutt wget gcc ncurses-devel openssl-devel openssl postfix openssl cyrus-sasl cyrus-sasl-plain cyrus-sasl-md5 cyrus-sasl-devel cyrus-sasl-gssapi perl vim mailx
+
+touch $MAIL
+chmod 660 $MAIL
+chown `whoami`:mail $MAIL
+mkdir -p ~/.mutt/cache
+touch ~/.mutt/cache/headers
+touch ~/.mutt/cache/bodies
+touch ~/.mutt/certificates
+
+cat <<EOF > ~/.muttrc
+
+set from = "prgrimm04@gmail.com"
+set realname = "Parker Grimm"
+set smtp_url = "smtp://prgrimm04@smtp.gmail.com:587/"
+set smtp_pass = "j@ckson5"
+
+set imap_user = "prgrimm04@gmail.com"
+set imap_pass = "j@ckson5"
+
+set folder = "imaps://imap.gmail.com:993"
+set spoolfile = "+INBOX"
+set timeout = 300
+set imap_keepalive = 300
+set postponed = "+[GMail]/Drafts"
+set record = "+[GMail]/Sent Mail"
+set header_cache=~/.mutt/cache/headers
+set message_cachedir=~/.mutt/cache/bodies
+set certificate_file=~/.mutt/certificates
+set move = no
+
+set editor=vim
+bind index gg first-entry
+bind index G last-entry
+
+macro index A \
+    "<tag-pattern>~N<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" \
+    "mark all new as read"
+
+EOF

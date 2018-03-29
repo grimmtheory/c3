@@ -1,5 +1,4 @@
-import requests, json, sys, poplib, smtplib, email
-import os
+import sys, os, requests, json, sys, poplib, smtplib, email
 
 ##Functions##
 def sendEmail(SMTPServer, RAPEmail, RAPLogin, RAPPass)
@@ -25,4 +24,9 @@ AppName = os.getenv('cliqrAppName')
 RequestUserName = os.getenv('launchUserName')
 DepEnv = os.getenv('CliqrDepEnvName')
 
+TotalCost = 500 #Placeholder for testing, needing to find cost Var and calculate
+
 ##Main begins here##
+if TotalCost <= ArchApprovalAmount:
+    print("No approvals required, exiting.")
+    sys.exit(0)
