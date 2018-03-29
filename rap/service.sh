@@ -48,13 +48,6 @@ if [ "$(id -u)" != "0" ]; then
     exec sudo "$0" "$@"
 fi
 
-# Setup prereqs
-print_log "Installing Prereqs"
-yum -y --skip-broken update
-yum -y --skip-broken install mutt fetchmail postfix openssl cyrus-sasl cyrus-sasl-plain \
-cyrus-sasl-md5 cyrus-sasl-devel cyrus-sasl-gssapi mailx
-print_log "Prereqs install complete"
-
 # Functions
 ## Execution status
 function executionStatus() {
@@ -65,11 +58,20 @@ function executionStatus() {
 if grep -q "Error" "$FILE"; then
    exit 1
 fi
+}
 
+## Setup prereqs
+function setupPrereqs() {
+ print_log "Installing Prereqs"
+ yum -y --skip-broken update
+ yum -y --skip-broken install mutt fetchmail postfix openssl cyrus-sasl cyrus-sasl-plain \
+ cyrus-sasl-md5 cyrus-sasl-devel cyrus-sasl-gssapi mailx
+ print_log "Prereqs install complete"
 }
 
 ## Setup Mutt
 function muttSetup() {
+  print_log "Setting up Mutt"
  touch $MAIL
  chmod 660 $MAIL
  chown `whoami`:mail $MAIL
@@ -83,7 +85,7 @@ set realname = "Parker Grimm"
 set smtp_url = "smtp://prgrimm04@smtp.gmail.com:587/"
 set smtp_pass = $RAPPass
 set imap_user = "prgrimm04@gmail.com"
-set imap_pass = $RAPass
+set imap_pass = $RAPPass
 set folder = "imaps://imap.gmail.com:993"
 set spoolfile = "+INBOX"
 set timeout = 300
@@ -95,12 +97,15 @@ set message_cachedir=~/.mutt/cache/bodies
 set certificate_file=~/.mutt/certificates
 set move = no
 EOF
+ print_log "Mutt setup complete"
 }
 
 # Cases
 case $cmd in
 	start)
 		print_log "Executing Service.."
+		print_log "$(env)"
+		setupPrereqs
 		muttSetup
 		echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" jgrimm73@gmail.com
 		executionStatus
@@ -111,10 +116,6 @@ case $cmd in
 		;;
 	update)
 		print_log "Updating Service.."
-		;;
-	*)
-		serviceStatus="No Valid Script Argument"
-		exit 127
 		;;
 esac
 
