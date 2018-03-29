@@ -138,7 +138,7 @@ case $cmd in
 		setupMutt
 		setupFetchmail
 		testSMTP
-		echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" jgrimm73@gmail.com
+		echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" $ArchEmail
 		executionStatus
 		;;
 	stop)
