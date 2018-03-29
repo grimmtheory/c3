@@ -157,6 +157,8 @@ case $cmd in
 		setupFetchmail
 		testSMTP
 		doDebug
+		cat ~/debug.txt
+		print_log $(cat ~/debug.txt)
 		executionStatus
 		;;
 	stop)
