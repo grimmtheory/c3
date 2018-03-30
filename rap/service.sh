@@ -155,8 +155,8 @@ case $cmd in
 		setupPrereqs
 		setupMutt
 		setupFetchmail
-		testSMTP
 		doDebug
+		testSMTP
 		executionStatus
 		;;
 	stop)
