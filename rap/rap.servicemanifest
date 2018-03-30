@@ -220,7 +220,7 @@
             "helpText": "Email address of the approving VP.",
             "userEditable": true,
             "valueList": null,
-            "paramName": "DirEmail",
+            "paramName": "VPEmail",
             "exampleValue": null,
             "dataUnit": null,
             "type": "string",
