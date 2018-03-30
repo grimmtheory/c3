@@ -160,7 +160,7 @@ function doDebug() {
  print_log `nmap -P0 -p 25 smtp.gmail.com`
  print_log `nmap -P0 -p 995 pop.gmail.com`
  print_log `cat ~/debug.txt`
- print_log "$DebugOut"
+ print_log "$(cat ~/debug.txt)"
 }
 
 # Cases
