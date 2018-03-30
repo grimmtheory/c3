@@ -117,7 +117,7 @@ set postmaster `whoami`
 poll $Pop3Server with proto POP3
    user $RAPLogin there with password $RAPPass is `whoami` here options ssl
 EOF
-chmod 600 ~/.fetchmailrc
+ chmod 600 ~/.fetchmailrc
  print_log "$(cat ~/.fetchmailrc)"
  print_log "Fetchmail setup complete"
 }
