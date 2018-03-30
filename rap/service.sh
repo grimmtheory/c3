@@ -163,8 +163,9 @@ case $cmd in
 		print_log "Deleting Service.."
 		executionStatus
 		;;
-	update)
-		print_log "Updating Service.."
+	*)
+		serviceStatus="No Valid Script Argument"
+		exit 127
 		;;
 esac
 
