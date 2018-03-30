@@ -10,28 +10,29 @@ By default the service comes with 4 approval levels - architect, manager, direct
 
 The service can be modified as needed, the default configuration options are available in the service properties section of the web-ui and are as follows:
 
-1) ArchEmail, ArchApprovalAmount
-2) MgrEmail, MgrApprovalAmount
-3) DirEmail, DirApprovalAmount
-4) VPName, VPEmail, VPApprovalAmount
-5) RAPEmail, RAPUser, RAPLogin, RAPPass
-6) Pop3Server, IMAPServer, SMTPServer
+1. ArchEmail, ArchApprovalAmount
+2. MgrEmail, MgrApprovalAmount
+3. DirEmail, DirApprovalAmount
+4. VPName, VPEmail, VPApprovalAmount
+5. RAPEmail, RAPUser, RAPLogin, RAPPass
+6. Pop3Server, IMAPServer, SMTPServer
 
 The service uses several native CloudCenter environment variables, e.g.:
 
-1) AppName (from cliqrAppName)
-2) RequestUserName (from launchUserName)
-3) DepEnv (from CliqrDepEnvName)
+1. AppName (from cliqrAppName)
+2. RequestUserName (from launchUserName)
+3. DepEnv (from CliqrDepEnvName)
 
 The flow of the service can be seen here https://github.com/grimmtheory/c3/blob/master/rap/tmp/approval-flow.jpg, but the basic process is as follows:
 
-1) Create Variables
-2) Check if approval is required, if not exit 0, if so then
-3) Create an email template, e.g. RequestUserName is requesting application AppName be deployed to DepEnv %Today% at %TIME%, please reply with approved or denied.
-4) Send email request to ArchEmail
-5) Poll the POP3 server every 60 seconds for messages with matching %JOB_NAME% and pull new messages
-6) If the message contains approved, check to see if further approvals are needed, and if so send another email to the next approver, else exit the service with an error (terminating the job)
-7) Log the events and email the requesting user %EMAIL_ADDRESS% with the status
+1. Create Variables
+2. Install Prerequisites, configure tools, e.g. mutt, fetchmail, etc.
+3. Check if approval is required, if not exit 0, if so then
+* Create an email template, e.g. RequestUserName is requesting application AppName be deployed to DepEnv %Today% at %TIME%, please reply with approved or denied.
+* Send email request to ArchEmail
+* Poll the POP3 server every 60 seconds for messages with matching %JOB_NAME% and pull new messages
+* If the message contains approved, check to see if further approvals are needed, and if so send another email to the next approver, else exit the service with an error (terminating the job)
+* Log the events and email the requesting user %EMAIL_ADDRESS% with the status
 
 This service is written in python using native smtplib and poplib modules.  More info and references can be found here https://docs.python.org/3/library/smtplib.html and here https://docs.python.org/3/library/poplib.html
 
