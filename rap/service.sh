@@ -100,6 +100,7 @@ set message_cachedir=~/.mutt/cache/bodies
 set certificate_file=~/.mutt/certificates
 set move = no
 EOF
+ chmod 600 ~/.muttrc
  print_log "$(cat ~/.muttrc)"
  print_log "Mutt setup complete"
 }
