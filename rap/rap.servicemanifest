@@ -6,7 +6,38 @@
         "read",
         "write"
     ],
-    "repositories": [],
+    "repositories": [
+        {
+            "accessKey": null,
+            "displayName": "jtg-test-repo",
+            "description": "Jason Grimm test repository",
+            "perms": [
+                "write",
+                "administration",
+                "read",
+                "delete"
+            ],
+            "sslCredential": null,
+            "region": null,
+            "hostname": "18.144.62.182",
+            "chefUser": null,
+            "port": 80,
+            "trustedCert": null,
+            "bundleStore": false,
+            "chefValidationKey": null,
+            "bucketName": null,
+            "certname": null,
+            "chefUserKey": null,
+            "resource": "https://sandbox.cliqr.com/v1/tenants/37/services/332/219?size=0",
+            "accessSecret": null,
+            "usernamePassword": {
+                "username": "",
+                "password": ""
+            },
+            "type": "HTTP",
+            "id": "219"
+        }
+    ],
     "egressRestrictions": [],
     "externalBundleLocation": "",
     "visible": true,
