@@ -57,9 +57,9 @@ function executionStatus() {
  echo "" > $StatusFile
  status=`cat $StatusFile`
  print_log "$status"
-if grep -q "Error" "$StatusFile"; then
-   exit 1
-fi
+# if grep -q "Error" "$StatusFile"; then
+#    exit 1
+# fi
 }
 
 ## Setup prereqs
@@ -161,6 +161,18 @@ case $cmd in
 		executionStatus
 		;;
 	stop)
+		print_log "Deleting Service.."
+		executionStatus
+		;;
+	suspend)
+		print_log "Deleting Service.."
+		executionStatus
+		;;
+	resume)
+		print_log "Deleting Service.."
+		executionStatus
+		;;
+	update)
 		print_log "Deleting Service.."
 		executionStatus
 		;;
