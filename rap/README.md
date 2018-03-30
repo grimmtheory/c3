@@ -13,18 +13,17 @@ The service can be modified as needed, the default configuration options are ava
 1) ArchEmail, ArchApprovalAmount
 2) MgrEmail, MgrApprovalAmount
 3) DirEmail, DirApprovalAmount
-4) VPName, VPEmail
-5) RAPEmail, RAPLogin, RAPPass
-6) Pop3Server, SMTPServer
-7) Today
+4) VPName, VPEmail, VPApprovalAmount
+5) RAPEmail, RAPUser, RAPLogin, RAPPass
+6) Pop3Server, IMAPServer, SMTPServer
 
-The service uses several native CloudCenter environment variables:
+The service uses several native CloudCenter environment variables, e.g.:
 
 1) AppName (from cliqrAppName)
 2) RequestUserName (from launchUserName)
 3) DepEnv (from CliqrDepEnvName)
 
-The flow of the service can be seen here https://github.com/datacenter/cloudcenter-content/tree/master/services/rap/approval-flow.jpg, but the basic process is as follows:
+The flow of the service can be seen here https://github.com/grimmtheory/c3/blob/master/rap/tmp/approval-flow.jpg, but the basic process is as follows:
 
 1) Create Variables
 2) Check if approval is required, if not exit 0, if so then
@@ -39,3 +38,5 @@ This service is written in python using native smtplib and poplib modules.  More
 This has been tested with CloudCenter 4.8.2.1
 
 This service is released under the GNU General Public License version 2.0, which is an open source license.
+
+![approval flow](https://raw.githubusercontent.com/grimmtheory/c3/master/rap/tmp/approval-flow.jpg)
