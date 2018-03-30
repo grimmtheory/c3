@@ -28,16 +28,16 @@ The flow of the service can be seen here https://github.com/grimmtheory/c3/blob/
 1. Create Variables
 2. Install Prerequisites, configure tools, e.g. mutt, fetchmail, etc.
 3. Check if approval is required, if not exit 0, if so then
-* Create an email template, e.g. RequestUserName is requesting application AppName be deployed to DepEnv %Today% at %TIME%, please reply with approved or denied.
-* Send email request to ArchEmail
-* Poll the POP3 server every 60 seconds for messages with matching %JOB_NAME% and pull new messages
-* If the message contains approved, check to see if further approvals are needed, and if so send another email to the next approver, else exit the service with an error (terminating the job)
-* Log the events and email the requesting user %EMAIL_ADDRESS% with the status
+    * Create an email template, e.g. RequestUserName is requesting application AppName be deployed to DepEnv %Today% at %TIME%, please reply with approved or denied.
+    * Send email request to ArchEmail
+    * Poll the POP3 server every 60 seconds for messages with matching %JOB_NAME% and pull new messages
+    * If the message contains approved, check to see if further approvals are needed, and if so send another email to the next approver, else exit the service with an error (terminating the job)
+    * Log the events and email the requesting user %EMAIL_ADDRESS% with the status
 
 This service is written in python using native smtplib and poplib modules.  More info and references can be found here https://docs.python.org/3/library/smtplib.html and here https://docs.python.org/3/library/poplib.html
 
 This has been tested with CloudCenter 4.8.2.1
 
-This service is released under the GNU General Public License version 2.0, which is an open source license.
-
 ![approval flow](https://raw.githubusercontent.com/grimmtheory/c3/master/rap/tmp/approval-flow.jpg)
+
+This service is released under the Apache License version 2.0, which is an open source license.
