@@ -33,7 +33,7 @@
 
 # Source variables
 function sourceVars() {
-print_log "Sourcing variables"
+ print_log "Sourcing variables"
  source /utils.sh
  source /usr/local/osmosix/etc/.osmosix.sh
  source /usr/local/osmosix/etc/userenv
@@ -53,11 +53,11 @@ fi
 # Functions
 ## Execution status
 function executionStatus() {
- FILE="status.txt"
- status=`cat $FILE`
+ StatusFile="~/status.txt"
+ echo "" > $StatusFile
+ status=`cat $StatusFile`
  print_log "$status"
-
-if grep -q "Error" "$FILE"; then
+if grep -q "Error" "$StatusFile"; then
    exit 1
 fi
 }
@@ -108,7 +108,6 @@ EOF
 function setupFetchmail() {
  print_log "Setting up Fetchmail"
  mkdir ~/.fetchmail
- echo "" > ~/.fetchmailrc
 cat <<EOF > ~/.fetchmailrc
 # set username
 set postmaster `whoami`
@@ -122,7 +121,7 @@ EOF
 }
 
 ## Test SMTP
-function testSMTP () {
+function testSMTP() {
  print_log "Testing SMTP"
   print_log "$(echo \"Everything is OK\" \| mutt -s \"TEST email - mutt SMTP\" $ArchEmail)"
  echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" $ArchEmail
@@ -132,19 +131,21 @@ function testSMTP () {
 ## Debug
 function doDebug() {
  print_log "Start Debugging"
- echo "" > ~/debug.txt
- echo "Install nmap" >> ~/debug.txt
- yum -y --skip-broken install nmap >> ~/debug.txt
- echo "Mutt check" >> ~/debug.txt
+ DebugFile="~/debug.txt"
+ echo "Install nmap" >> $DebugFile
+ yum -y --skip-broken install nmap | tail -n 10 >> $DebugFile
+ echo "Mutt check" >> $DebugFile
+ cat ~/.muttrc >> $DebugFile
  mutt -v >> ~/debug.txt
  testSMTP >> ~/debug.txt
- echo "Fetchmail check" >> ~/debug.txt
- fetchmail >> ~/debug.txt
- mail -H >> ~/debug.txt
- echo "Network check" >> ~/debug.txt
- nmap -P0 -p 25 $SMTPServer >> ~/debug.txt
- nmap -P0 -p 110 $Pop3Server >> ~/debug.txt
- print_log "$(cat ~/debug.txt)"
+ echo "Fetchmail check" >> $DebugFile
+ cat ~/.fetchmailrc >> $DebugFile
+ fetchmail | tail -n 5 >> $DebugFile
+ mail -H >> $DebugFile
+ echo "Network check" >> $DebugFile
+ nmap -P0 -p 25 $SMTPServer >> $DebugFile
+ nmap -P0 -p 995 $Pop3Server >> $DebugFile
+ print_log "$(cat $DebugFile)"
 }
 
 # Cases
@@ -168,10 +169,3 @@ case $cmd in
 		exit 127
 		;;
 esac
-
-
-
-
-
-
-
