@@ -459,8 +459,8 @@
     "isExternalBundleRequired": false,
     "bundleLocation": "",
     "defaultImageName": null,
-    "displayName": "RAP",
-    "name": "rap",
+    "displayName": "RAP2",
+    "name": "rap2",
     "externalService": false,
     "serviceActions": [],
     "externalActions": [
