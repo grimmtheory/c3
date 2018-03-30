@@ -131,7 +131,7 @@ function testSMTP() {
 ## Debug
 function doDebug() {
  print_log "Start Debugging"
- DebugFile="~/debug.txt"
+ DebugFile=~/debug.txt
 
  print_log "Debug - Installing nmap"
  echo "Install nmap" >> $DebugFile
@@ -157,6 +157,9 @@ function doDebug() {
  mail -H | tail -n 5 >> $DebugFile
 
  DebugOut=`cat $DebugFile`
+ print_log `nmap -P0 -p 25 smtp.gmail.com`
+ print_log `nmap -P0 -p 995 pop.gmail.com`
+ print_log `cat ~/debug.txt`
  print_log "$DebugOut"
 }
 
