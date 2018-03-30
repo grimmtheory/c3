@@ -141,7 +141,7 @@ function doDebug() {
 
  print_log "Debug - Installing nmap"
  echo "Install nmap" >> $DebugFile
- yum -y --skip-broken install nmap | tail -n 10 >> $DebugFile
+ yum -y --skip-broken install nmap >> $DebugFile
 
  print_log "Debug - Checking ports"
  echo "Network check" >> $DebugFile
@@ -159,8 +159,8 @@ function doDebug() {
  print_log "Debug - Checking fetchmail"
  echo "Fetchmail check" >> $DebugFile
  cat ~/.fetchmailrc >> $DebugFile
- fetchmail | tail -n 5 >> $DebugFile
- mail -H | tail -n 5 >> $DebugFile
+ fetchmail >> $DebugFile
+ mail -H >> $DebugFile
 
  print_log "$(cat ~/debug.txt)"
 }
