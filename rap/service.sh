@@ -130,7 +130,9 @@ EOF
 function testSMTP() {
  print_log "Testing SMTP"
   print_log "$(echo \"Everything is OK\" \| mutt -s \"TEST email - mutt SMTP\" $ArchEmail)"
- echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" $ArchEmail
+ # echo "Everything is OK" | mutt -s "TEST email - mutt SMTP" $ArchEmail
+ echo "$RAPUser has requested to launch a VM, please reply to this email with approve or deny" > ~/message.txt
+ mutt -s "$RAPUser has requested to launch a VM" $ArchEmail < ~/message.txt
  print_log "SMTP testing complete"
 }
 
