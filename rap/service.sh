@@ -132,20 +132,32 @@ function testSMTP() {
 function doDebug() {
  print_log "Start Debugging"
  DebugFile="~/debug.txt"
+
+ print_log "Debug - Installing nmap"
  echo "Install nmap" >> $DebugFile
  yum -y --skip-broken install nmap | tail -n 10 >> $DebugFile
- echo "Mutt check" >> $DebugFile
- cat ~/.muttrc >> $DebugFile
- mutt -v >> ~/debug.txt
- testSMTP >> ~/debug.txt
- echo "Fetchmail check" >> $DebugFile
- cat ~/.fetchmailrc >> $DebugFile
- fetchmail | tail -n 5 >> $DebugFile
- mail -H >> $DebugFile
+
+ print_log "Debug - Checking ports"
  echo "Network check" >> $DebugFile
  nmap -P0 -p 25 $SMTPServer >> $DebugFile
  nmap -P0 -p 995 $Pop3Server >> $DebugFile
- print_log "$(cat $DebugFile)"
+
+ print_log "Debug - Checking mutt config"
+ echo "Debug - Checking mutt" >> $DebugFile
+ cat ~/.muttrc >> $DebugFile
+ mutt -v >> $DebugFile
+
+ print_log "Debug - Testing SMTP"
+ testSMTP >> $DebugFile
+
+ print_log "Debug - Checking fetchmail"
+ echo "Fetchmail check" >> $DebugFile
+ cat ~/.fetchmailrc >> $DebugFile
+ fetchmail | tail -n 5 >> $DebugFile
+ mail -H | tail -n 5 >> $DebugFile
+
+ DebugOut=`cat $DebugFile`
+ print_log "$DebugOut"
 }
 
 # Cases
@@ -161,19 +173,19 @@ case $cmd in
 		executionStatus
 		;;
 	stop)
-		print_log "Deleting Service.."
+		print_log "Stopping Service.."
 		executionStatus
 		;;
 	suspend)
-		print_log "Deleting Service.."
+		print_log "Suspending Service.."
 		executionStatus
 		;;
 	resume)
-		print_log "Deleting Service.."
+		print_log "Resuming Service.."
 		executionStatus
 		;;
 	update)
-		print_log "Deleting Service.."
+		print_log "Updating Service.."
 		executionStatus
 		;;
 	*)
