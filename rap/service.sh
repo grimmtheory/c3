@@ -83,12 +83,12 @@ function setupMutt() {
  touch ~/.mutt/certificates
  echo "" > ~/.muttrc
 cat <<EOF > ~/.muttrc
-set from = $RAPLogin
+set from = "$RAPLogin"
 set realname = "$RAPUser"
 set smtp_url = "smtp://$RAPUser@$SMTPServer:587/"
-set smtp_pass = $RAPPass
-set imap_user = $RAPLogin
-set imap_pass = $RAPPass
+set smtp_pass = "$RAPPass"
+set imap_user = "$RAPLogin"
+set imap_pass = "$RAPPass"
 set folder = "imaps://$IMAPServer:993"
 set spoolfile = "+INBOX"
 set timeout = 300
@@ -156,10 +156,6 @@ function doDebug() {
  fetchmail | tail -n 5 >> $DebugFile
  mail -H | tail -n 5 >> $DebugFile
 
- DebugOut=`cat $DebugFile`
- print_log `nmap -P0 -p 25 smtp.gmail.com`
- print_log `nmap -P0 -p 995 pop.gmail.com`
- print_log `cat ~/debug.txt`
  print_log "$(cat ~/debug.txt)"
 }
 
