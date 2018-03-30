@@ -82,6 +82,7 @@ function setupMutt() {
  touch ~/.mutt/cache/bodies
  touch ~/.mutt/certificates
  echo "" > ~/.muttrc
+
 cat <<EOF > ~/.muttrc
 set from = "$RAPLogin"
 set realname = "$RAPUser"
@@ -100,6 +101,7 @@ set message_cachedir=~/.mutt/cache/bodies
 set certificate_file=~/.mutt/certificates
 set move = no
 EOF
+
  chmod 600 ~/.muttrc
  print_log "$(cat ~/.muttrc)"
  print_log "Mutt setup complete"
@@ -109,6 +111,7 @@ EOF
 function setupFetchmail() {
  print_log "Setting up Fetchmail"
  mkdir ~/.fetchmail
+
 cat <<EOF > ~/.fetchmailrc
 # set username
 set postmaster `whoami`
@@ -117,6 +120,7 @@ set postmaster `whoami`
 poll $Pop3Server with proto POP3
    user $RAPLogin there with password $RAPPass is `whoami` here options ssl
 EOF
+
  chmod 600 ~/.fetchmailrc
  print_log "$(cat ~/.fetchmailrc)"
  print_log "Fetchmail setup complete"
