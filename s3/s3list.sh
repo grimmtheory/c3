@@ -14,7 +14,7 @@ agentSendLogMessage "** S3 Bucket List Service Starting **"
 installAWSCli() {
     agentSendLogMessage "Installing AWS CLI tools..."
         if [ type aws > /dev/null ]; then
-            agentSendLogMessage  "AWS CLI already installed skipping the AWS CLI Install";
+            agentSendLogMessage  "AWS CLI already installed skipping the AWS CLI Install."
         else
             mkdir -p $INSTALL_DIR; cd $INSTALL_DIR
             wget https://s3.amazonaws.com/aws-cli/awscli-bundle.zip; unzip awscli-bundle.zip
