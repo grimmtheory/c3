@@ -25,6 +25,9 @@ AWS_CONFIG_DIR="/root/.aws"
 AWS_CONFIG_FILE="$AWS_CONFIG_DIR/config"
 AWS_CRED_FILE="$AWS_CONFIG_DIR/credentials"
 
+# Install prerequisites
+yum -y --skip-broken install jq
+
 # Functions
 installAWSCli() {
     agentSendLogMessage "Installing AWS CLI tools..."
@@ -56,8 +59,25 @@ configureAWSCli() {
 
 listAWSBuckets() {
 	agentSendLogMessage "Listing AWS S3 Buckets with command: $AWS_INSTALL_DIR/bin/aws s3api list-buckets"
+
 	returnList=`$AWS_INSTALL_DIR/bin/aws s3api list-buckets`
+	agentSendLogMessage "JSON Format"
 	agentSendLogMessage $returnList
+
+	agentSendLogMessage "List Format"
+	loopcount=0
+	/usr/local/aws/bin/aws s3api list-buckets > bucketlist.txt
+	bucketcount=`echo $returnList | grep Creation | wc -l`
+	while [ $loopcount -lt $bucketcount ]; do
+		bucketname=`echo $returnList | jq '.Buckets['"$loopcount"'].Name'`
+		bucketcreatedate=`echo $returnList | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $1 }'`
+		bucketcreatetime=`echo $returnList | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $2 }' | awk -F. '{ print $1 }'`
+		echo "Bucket Number: $loopcount"
+		echo "Bucket Name: $bucketname"
+		echo "Bucket Create Date: $bucketcreatedate"
+		echo "Bucket Create Time: $bucketcreatetime"
+		let loopcount=loopcount+1
+	done
 }
 
 # Main
