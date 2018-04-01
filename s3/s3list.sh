@@ -4,7 +4,7 @@
 . /usr/local/osmosix/service/utils/cfgutil.sh
 . /usr/local/osmosix/service/utils/agent_util.sh
 
-export SVCNAME="s3list"
+export SVCNAME=s3list
 export INSTALL_DIR="/usr/local/aws"
 export EC2_REGION="$region"
 
@@ -24,9 +24,9 @@ fi
 installAWSCli() {
     agentSendLogMessage "Installing AWS CLI tools..."
         if [ type aws > /dev/null ]; then
-            echo  "AWS Cli already installed skipping the AWS Cli Install";
+            agentSendLogMessage  "AWS Cli already installed skipping the AWS Cli Install";
             export PATH=$PATH:$INSTALL_DIR/bin
-            echo "PATH value is = $PATH"
+            agentSendLogMessage "PATH value is = $PATH"
         else
             mkdir -p $INSTALL_DIR
             cd $INSTALL_DIR
@@ -35,7 +35,7 @@ installAWSCli() {
             ./awscli-bundle/install -i $INSTALL_DIR
             rm -f awscli-bundle.zip
             export PATH=$PATH:$INSTALL_DIR/bin
-            echo "PATH value is = $PATH"
+            agentSendLogMessage "PATH value is = $PATH"
         fi
 }
 
