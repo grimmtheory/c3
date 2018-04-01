@@ -5,8 +5,9 @@
 . /usr/local/osmosix/service/utils/cfgutil.sh; . /usr/local/osmosix/service/utils/agent_util.sh
 INSTALL_DIR="/usr/local/aws"
 export PATH=$PATH:$INSTALL_DIR/bin
-AWS_CONFIG="/root/.aws/config"
-AWS_CREDS="/root/.aws/credentials"
+AWS_HOME="/root/.aws"
+AWS_CONFIG="$AWS_HOME/config"
+AWS_CREDS="$AWS_HOME/credentials"
 
 agentSendLogMessage "** S3 Bucket List Service Starting **"
 
@@ -23,6 +24,7 @@ installAWSCli() {
 
 configureAWSCli() {
 	agentSendLogMessage "Configuring AWS CLI tools..."
+	mkdir -p $AWS_HOME
 	echo "[default]" > $AWS_CONFIG
 	echo "region = $AWS_REGION" >> $AWS_CONFIG
 	chmod 600 $AWS_CONFIG
