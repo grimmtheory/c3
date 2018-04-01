@@ -28,13 +28,16 @@ AWS_BUCKET_FILE_JSON="/root/bucketlist.json.txt"
 AWS_BUCKET_FILE_PRETTY="/root/bucketlist.pretty.txt"
 
 # Install prerequisites
-agentSendLogMessage "Installing prerequisites..."
-if [ `which jq` ]; then
-	agentSendLogMessage "jq is already installed"
-else
-	agentSendLogMessage "jq is not installed, installing now"
-	yum -y --skip-broken install jq
-fi
+installPrerequisites() {
+	agentSendLogMessage "Installing prerequisites..."
+	if [ -f /bin/jq ]; then
+		agentSendLogMessage "jq is already installed"
+	else
+		agentSendLogMessage "jq is not installed, installing now"
+		yum -y --skip-broken install jq
+	fi
+}
+
 
 # Functions
 installAWSCli() {
@@ -89,6 +92,7 @@ listAWSBuckets() {
 # Main
 agentSendLogMessage "** S3 Bucket List Service Starting **"
 
+installPrerequisites
 installAWSCli
 configureAWSCli
 listAWSBuckets
