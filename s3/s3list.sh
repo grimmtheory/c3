@@ -38,12 +38,11 @@ installPrerequisites() {
 	fi
 }
 
-
 # Functions
 installAWSCli() {
     agentSendLogMessage "Installing AWS CLI tools..."
 
-        if [ -d $AWS_INSTALL_DIR ]; then
+        if [ -f $AWS_INSTALL_DIR/bin/aws ]; then
             agentSendLogMessage  "AWS CLI already installed, skipping the AWS CLI Install."
         else
             mkdir -p $AWS_INSTALL_DIR; cd $AWS_INSTALL_DIR
