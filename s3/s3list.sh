@@ -46,5 +46,4 @@ listAWSBuckets
 
 agentSendLogMessage "** S3 Bucket List Service Complete **"
 
-
 exit 0

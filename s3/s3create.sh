@@ -53,5 +53,4 @@ listAWSBuckets
 
 agentSendLogMessage "** S3 Bucket Creation Service Complete **"
 
-
 exit 0
