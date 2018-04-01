@@ -63,8 +63,8 @@ configureAWSCli() {
 listAWSBuckets() {
 	agentSendLogMessage "Listing AWS S3 Buckets with command: $AWS_INSTALL_DIR/bin/aws s3api list-buckets"
 
-	$AWS_INSTALL_DIR/bin/aws s3api list-buckets > $AWS_BUCKET_FILE
-	returnList=`cat $AWS_BUCKET_FILE`
+	$AWS_INSTALL_DIR/bin/aws s3api list-buckets > $AWS_BUCKET_FILE_JSON
+	returnList=`cat $AWS_BUCKET_FILE_JSON`
 	agentSendLogMessage "JSON Format"
 	echo $returnList
 	agentSendLogMessage $returnList
