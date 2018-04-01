@@ -72,17 +72,12 @@ listAWSBuckets() {
 	loopcount=0
 	bucketcount=`cat $AWS_BUCKET_FILE_JSON | grep Creation | wc -l`
 	while [ $loopcount -lt $bucketcount ]; do
-		bucketname=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].Name'`
-		bucketcreatedate=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $1 }'`
+		bucketname=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].Name' | sed -e 's/"//g'`
+		bucketcreatedate=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $1 }' | sed -e 's/"//g'`
 		bucketcreatetime=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $2 }' | awk -F. '{ print $1 }'`
-		# echo "Bucket Number: $loopcount" >> $AWS_BUCKET_FILE_PRETTY
-		# echo "Bucket Name: $bucketname" >> $AWS_BUCKET_FILE_PRETTY
-		# echo "Bucket Create Date: $bucketcreatedate" >> $AWS_BUCKET_FILE_PRETTY
-		# echo "Bucket Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
-		echo "Bucket Number: $loopcount, Bucket Name: $bucketname, Bucket Create Date: $bucketcreatedate, Bucket Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
+		echo "Bucket #: $loopcount -- Name: $bucketname -- Create Date: $bucketcreatedate -- Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
 		let loopcount=loopcount+1
 	done
-	agentSendLogMessage `cat $AWS_BUCKET_FILE_PRETTY`
 	while read line; do agentSendLogMessage "$line"; done < $AWS_BUCKET_FILE_PRETTY
 }
 
