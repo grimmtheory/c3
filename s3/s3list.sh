@@ -26,6 +26,7 @@ AWS_CONFIG_FILE="$AWS_CONFIG_DIR/config"
 AWS_CRED_FILE="$AWS_CONFIG_DIR/credentials"
 
 # Install prerequisites
+agentSendLogMessage "Installing prerequisites..."
 yum -y --skip-broken install jq
 
 # Functions
