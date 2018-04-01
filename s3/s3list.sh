@@ -9,8 +9,8 @@
 # Internal Vars	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
 
 # If running as an "external-service", execute and terminate docker container on the orchestrator
-. /utils.sh
-print_log "$(env)"
+# . /utils.sh
+# print_log "$(env)"
 
 # If running within a virtual machine (default)
 . /usr/local/osmosix/etc/.osmosix.sh
