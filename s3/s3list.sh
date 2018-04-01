@@ -29,7 +29,12 @@ AWS_BUCKET_FILE_PRETTY="/root/bucketlist.pretty.txt"
 
 # Install prerequisites
 agentSendLogMessage "Installing prerequisites..."
-yum -y --skip-broken install jq
+if [ `which jq` ]; then
+	echo "jq is already installed"
+else
+	echo "jq is not installed, installing now"
+	yum -y --skip-broken install jq
+fi
 
 # Functions
 installAWSCli() {
@@ -75,7 +80,7 @@ listAWSBuckets() {
 		bucketname=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].Name' | sed -e 's/"//g'`
 		bucketcreatedate=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $1 }' | sed -e 's/"//g'`
 		bucketcreatetime=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $2 }' | awk -F. '{ print $1 }'`
-		echo "Bucket #: $loopcount -- Name: $bucketname -- Create Date: $bucketcreatedate -- Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
+		echo "Bucket # $loopcount  ---  Name: $bucketname  ---  Create Date: $bucketcreatedate  ---  Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
 		let loopcount=loopcount+1
 	done
 	while read line; do agentSendLogMessage "$line"; done < $AWS_BUCKET_FILE_PRETTY
