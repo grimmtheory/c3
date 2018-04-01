@@ -74,6 +74,27 @@ createAWSBucket() {
 	sleep 10
 }
 
+listAWSBuckets() {
+	agentSendLogMessage "Listing AWS S3 Buckets with command: $AWS_INSTALL_DIR/bin/aws s3api list-buckets"
+
+	$AWS_INSTALL_DIR/bin/aws s3api list-buckets > $AWS_BUCKET_FILE_JSON
+	agentSendLogMessage "JSON Format"
+	agentSendLogMessage `cat $AWS_BUCKET_FILE_JSON`
+
+	agentSendLogMessage "List Format"
+	echo "" > $AWS_BUCKET_FILE_PRETTY
+	loopcount=0
+	bucketcount=`cat $AWS_BUCKET_FILE_JSON | grep Creation | wc -l`
+	while [ $loopcount -lt $bucketcount ]; do
+		bucketname=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].Name' | sed -e 's/"//g'`
+		bucketcreatedate=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $1 }' | sed -e 's/"//g'`
+		bucketcreatetime=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $2 }' | awk -F. '{ print $1 }'`
+		echo "Bucket # $loopcount  ---  Name: $bucketname  ---  Create Date: $bucketcreatedate  ---  Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
+		let loopcount=loopcount+1
+	done
+	while read line; do agentSendLogMessage "$line"; done < $AWS_BUCKET_FILE_PRETTY
+}
+
 installPrerequisites
 installAWSCli
 configureAWSCli
