@@ -5,8 +5,10 @@
 . /usr/local/osmosix/service/utils/cfgutil.sh; . /usr/local/osmosix/service/utils/agent_util.sh
 INSTALL_DIR="/usr/local/aws"
 export PATH=$PATH:$INSTALL_DIR/bin
+AWS_CONFIG="/root/.aws/config"
+AWS_CREDS="/root/.aws/credentials"
 
-agentSendLogMessage "Service Name :: s3 Bucket List starting"
+agentSendLogMessage "** S3 Bucket List Service Starting **"
 
 installAWSCli() {
     agentSendLogMessage "Installing AWS CLI tools..."
@@ -21,20 +23,26 @@ installAWSCli() {
 
 configureAWSCli() {
 	agentSendLogMessage "Configuring AWS CLI tools..."
-	echo "[default]" > ~/.aws/config
-	echo "region = $AWS_REGION" >> ~/.aws/config
-	echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" > ~/.aws/credentials
-	echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+	echo "[default]" > $AWS_CONFIG
+	echo "region = $AWS_REGION" >> $AWS_CONFIG
+	chmod 600 $AWS_CONFIG
+	echo "[default]" > $AWS_CREDS
+	echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> $AWS_CREDS
+	echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> $AWS_CREDS
+	chmod 600 $AWS_CREDS
 }
 
 listAWSBuckets() {
 	agentSendLogMessage "Listing AWS S3 Buckets..."
-	returnList=`aws s3api list-buckets`
+	returnList=`$INSTALL_DIR/bin/aws s3api list-buckets`
 	agentSendLogMessage $returnList
 }
 
 installAWSCli
 configureAWSCli
 listAWSBuckets
+
+agentSendLogMessage "** S3 Bucket List Service Complete **"
+
 
 exit 0
