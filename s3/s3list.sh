@@ -20,7 +20,7 @@ print_log "$(env)"
 
 # Declare / configure internal vars
 AWS_INSTALL_DIR="/usr/local/aws"
-PATH=$PATH:$INSTALL_DIR/bin
+PATH=$PATH:$AWS_INSTALL_DIR/bin
 AWS_CONFIG_DIR="/root/.aws"
 AWS_CONFIG_FILE="$AWS_CONFIG_DIR/config"
 AWS_CRED_FILE="$AWS_CONFIG_DIR/credentials"
@@ -64,10 +64,11 @@ listAWSBuckets() {
 	agentSendLogMessage "Listing AWS S3 Buckets with command: $AWS_INSTALL_DIR/bin/aws s3api list-buckets"
 
 	$AWS_INSTALL_DIR/bin/aws s3api list-buckets > $AWS_BUCKET_FILE_JSON
-	returnList=`cat $AWS_BUCKET_FILE_JSON`
 	agentSendLogMessage "JSON Format"
+	returnList=`cat $AWS_BUCKET_FILE_JSON`
 	echo $returnList
 	agentSendLogMessage $returnList
+	agentSendLogMessage `cat $AWS_BUCKET_FILE_JSON`
 
 	agentSendLogMessage "List Format"
 	echo "" > $AWS_BUCKET_FILE_PRETTY
@@ -83,8 +84,9 @@ listAWSBuckets() {
 		echo "Bucket Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
 		let loopcount=loopcount+1
 	done
-	$returnListFormatted=`cat $AWS_BUCKET_FILE_PRETTY`
+	returnListFormatted=`cat $AWS_BUCKET_FILE_PRETTY`
 	agentSendLogMessage $returnListFormatted
+	agentSendLogMessage `cat $AWS_BUCKET_FILE_PRETTY`
 }
 
 # Main
