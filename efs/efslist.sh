@@ -1,10 +1,10 @@
 #!/bin/bash
-# Title		: s3create.sh
-# Description	: Lifecycle action script for creating AWS S3 buckets.
+# Title		: s3list.sh
+# Description	: Lifecycle action script for listing AWS S3 buckets.
 # Author	: jasgrimm
 # Date		: 2018-04-01
 # Version	: 0.1
-# Usage		: bash s3create.sh
+# Usage		: bash s3list.sh
 # External Vars	: Read in at run time - $AWS_REGION, $AWS_ACCESS_KEY_ID, and $AWS_SECRET_ACCESS_KEY
 # Internal Vars	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
 
@@ -67,20 +67,35 @@ configureAWSCli() {
 	chmod 600 $AWS_CRED_FILE
 }
 
-createAWSBucket() {
-	agentSendLogMessage "Creating AWS S3 Bucket: $AWS_INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION"
-	$AWS_INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
-	agentSendLogMessage "AWS S3 Bucket Create Complete."
-	sleep 10
+listAWSBuckets() {
+	agentSendLogMessage "Listing AWS S3 Buckets with command: $AWS_INSTALL_DIR/bin/aws s3api list-buckets"
+
+	$AWS_INSTALL_DIR/bin/aws s3api list-buckets > $AWS_BUCKET_FILE_JSON
+	agentSendLogMessage "JSON Format"
+	agentSendLogMessage `cat $AWS_BUCKET_FILE_JSON`
+
+	agentSendLogMessage "List Format"
+	echo "" > $AWS_BUCKET_FILE_PRETTY
+	loopcount=0
+	bucketcount=`cat $AWS_BUCKET_FILE_JSON | grep Creation | wc -l`
+	while [ $loopcount -lt $bucketcount ]; do
+		bucketname=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].Name' | sed -e 's/"//g'`
+		bucketcreatedate=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $1 }' | sed -e 's/"//g'`
+		bucketcreatetime=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $2 }' | awk -F. '{ print $1 }'`
+		echo "Bucket # $loopcount  ---  Name: $bucketname  ---  Create Date: $bucketcreatedate  ---  Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
+		let loopcount=loopcount+1
+	done
+	while read line; do agentSendLogMessage "$line"; done < $AWS_BUCKET_FILE_PRETTY
 }
+
+# Main
+agentSendLogMessage "** S3 Bucket List Service Starting **"
 
 installPrerequisites
 installAWSCli
 configureAWSCli
 listAWSBuckets
-createAWSBucket
-listAWSBuckets
 
-agentSendLogMessage "** S3 Bucket Creation Service Complete **"
+agentSendLogMessage "** S3 Bucket List Service Complete **"
 
 exit 0
