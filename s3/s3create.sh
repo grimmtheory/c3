@@ -37,6 +37,9 @@ configureAWSCli() {
 createAWSBucket() {
 	agentSendLogMessage "Creating AWS S3 Bucket..."
 	$INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
+	agentSendLogMessage "$INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
+	"
+	agentSendLogMessage "AWS S3 Bucket Create Complete."
 	sleep 10
 }
 
