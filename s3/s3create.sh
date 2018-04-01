@@ -24,8 +24,19 @@ PATH=$PATH:$AWS_INSTALL_DIR/bin
 AWS_CONFIG_DIR="/root/.aws"
 AWS_CONFIG_FILE="$AWS_CONFIG_DIR/config"
 AWS_CRED_FILE="$AWS_CONFIG_DIR/credentials"
+AWS_BUCKET_FILE_JSON="/root/bucketlist.json.txt"
+AWS_BUCKET_FILE_PRETTY="/root/bucketlist.pretty.txt"
 
-agentSendLogMessage "** S3 Bucket Creation Service Starting **"
+# Install prerequisites
+installPrerequisites() {
+	agentSendLogMessage "Installing prerequisites..."
+	if [ -f /bin/jq ]; then
+		agentSendLogMessage "JQ is already installed, skipping install."
+	else
+		agentSendLogMessage "JQ is not installed, installing now."
+		yum -y --skip-broken install jq
+	fi
+}
 
 # Functions
 installAWSCli() {
@@ -54,24 +65,18 @@ configureAWSCli() {
 	echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> $AWS_CRED_FILE
 	echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> $AWS_CRED_FILE
 	chmod 600 $AWS_CRED_FILE
+}
 
 createAWSBucket() {
-	agentSendLogMessage "Creating AWS S3 Bucket with command: $INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
-	"
+	agentSendLogMessage "Creating AWS S3 Bucket: $AWS_INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION"
 	$AWS_INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
 	agentSendLogMessage "AWS S3 Bucket Create Complete."
 	sleep 10
 }
 
-listAWSBuckets() {
-	agentSendLogMessage "Listing AWS S3 Bucket with command: $AWS_INSTALL_DIR/bin/aws s3api list-buckets"
-	agentSendLogMessage `$AWS_INSTALL_DIR/bin/aws s3api list-buckets`
-}
-
 installAWSCli
 configureAWSCli
 createAWSBucket
-listAWSBuckets
 
 agentSendLogMessage "** S3 Bucket Creation Service Complete **"
 
