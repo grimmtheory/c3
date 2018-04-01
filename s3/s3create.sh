@@ -35,16 +35,15 @@ configureAWSCli() {
 }
 
 createAWSBucket() {
-	agentSendLogMessage "Creating AWS S3 Bucket..."
-	$INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
-	agentSendLogMessage "$INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
+	agentSendLogMessage "Creating AWS S3 Bucket with command: $INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
 	"
+	$INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
 	agentSendLogMessage "AWS S3 Bucket Create Complete."
 	sleep 10
 }
 
 listAWSBuckets() {
-	agentSendLogMessage "Listing AWS S3 Buckets..."
+	agentSendLogMessage "Listing AWS S3 Bucket with command: $INSTALL_DIR/bin/aws s3api list-buckets"
 	returnList=`$INSTALL_DIR/bin/aws s3api list-buckets`
 	agentSendLogMessage $returnList
 }
