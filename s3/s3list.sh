@@ -1,10 +1,10 @@
 #!/bin/bash
-# Title			: s3list.sh
+# Title		: s3list.sh
 # Description	: Lifecycle action script for listing AWS S3 buckets.
-# Author		: demehta
-# Date			: 2018-04-01
-# Version		: 0.1
-# Usage			: bash s3list.sh
+# Author	: jasgrimm
+# Date		: 2018-04-01
+# Version	: 0.1
+# Usage		: bash s3list.sh
 # External Vars	: Read in at run time - $AWS_REGION, $AWS_ACCESS_KEY_ID, and $AWS_SECRET_ACCESS_KEY
 # Internal Vars	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
 
@@ -47,7 +47,7 @@ configureAWSCli() {
 	echo "[default]" > $AWS_CONFIG_FILE
 	echo "region = $AWS_REGION" >> $AWS_CONFIG_FILE
 	chmod 600 $AWS_CONFIG_FILE
-	
+
 	echo "[default]" > $AWS_CRED_FILE
 	echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> $AWS_CRED_FILE
 	echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> $AWS_CRED_FILE
