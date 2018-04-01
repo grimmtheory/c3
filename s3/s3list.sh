@@ -22,8 +22,8 @@ print_log "$(env)"
 AWS_INSTALL_DIR="/usr/local/aws"
 PATH=$PATH:$INSTALL_DIR/bin
 AWS_CONFIG_DIR="/root/.aws"
-AWS_CONFIG_FILE="$AWS_HOME/config"
-AWS_CRED_FILE="$AWS_HOME/credentials"
+AWS_CONFIG_FILE="$AWS_CONFIG_DIR/config"
+AWS_CRED_FILE="$AWS_CONFIG_DIR/credentials"
 
 # Functions
 installAWSCli() {
