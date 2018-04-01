@@ -65,9 +65,6 @@ listAWSBuckets() {
 
 	$AWS_INSTALL_DIR/bin/aws s3api list-buckets > $AWS_BUCKET_FILE_JSON
 	agentSendLogMessage "JSON Format"
-	returnList=`cat $AWS_BUCKET_FILE_JSON`
-	echo $returnList
-	agentSendLogMessage $returnList
 	agentSendLogMessage `cat $AWS_BUCKET_FILE_JSON`
 
 	agentSendLogMessage "List Format"
@@ -84,9 +81,9 @@ listAWSBuckets() {
 		echo "Bucket Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
 		let loopcount=loopcount+1
 	done
-	returnListFormatted=`cat $AWS_BUCKET_FILE_PRETTY`
-	agentSendLogMessage $returnListFormatted
 	agentSendLogMessage `cat $AWS_BUCKET_FILE_PRETTY`
+	agentSendLogMessage `while read line; do echo "$line"; done < $AWS_BUCKET_FILE_PRETTY`
+	while read line; do agentSendLogMessage "$line"; done < $AWS_BUCKET_FILE_PRETTY
 }
 
 # Main
