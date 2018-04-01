@@ -31,9 +31,9 @@ AWS_BUCKET_FILE_PRETTY="/root/bucketlist.pretty.txt"
 installPrerequisites() {
 	agentSendLogMessage "Installing prerequisites..."
 	if [ -f /bin/jq ]; then
-		agentSendLogMessage "jq is already installed"
+		agentSendLogMessage "JQ is already installed, skipping install."
 	else
-		agentSendLogMessage "jq is not installed, installing now"
+		agentSendLogMessage "JQ is not installed, installing now."
 		yum -y --skip-broken install jq
 	fi
 }
