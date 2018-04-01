@@ -24,6 +24,8 @@ PATH=$PATH:$INSTALL_DIR/bin
 AWS_CONFIG_DIR="/root/.aws"
 AWS_CONFIG_FILE="$AWS_CONFIG_DIR/config"
 AWS_CRED_FILE="$AWS_CONFIG_DIR/credentials"
+AWS_BUCKET_FILE_JSON="/root/bucketlist.json.txt"
+AWS_BUCKET_FILE_PRETTY="/root/bucketlist.pretty.txt"
 
 # Install prerequisites
 agentSendLogMessage "Installing prerequisites..."
@@ -61,24 +63,28 @@ configureAWSCli() {
 listAWSBuckets() {
 	agentSendLogMessage "Listing AWS S3 Buckets with command: $AWS_INSTALL_DIR/bin/aws s3api list-buckets"
 
-	returnList=`$AWS_INSTALL_DIR/bin/aws s3api list-buckets`
+	$AWS_INSTALL_DIR/bin/aws s3api list-buckets > $AWS_BUCKET_FILE
+	returnList=`cat $AWS_BUCKET_FILE`
 	agentSendLogMessage "JSON Format"
+	echo $returnList
 	agentSendLogMessage $returnList
 
 	agentSendLogMessage "List Format"
+	echo "" > $AWS_BUCKET_FILE_PRETTY
 	loopcount=0
-	/usr/local/aws/bin/aws s3api list-buckets > bucketlist.txt
-	bucketcount=`echo $returnList | grep Creation | wc -l`
+	bucketcount=`cat $AWS_BUCKET_FILE_JSON | grep Creation | wc -l`
 	while [ $loopcount -lt $bucketcount ]; do
-		bucketname=`echo $returnList | jq '.Buckets['"$loopcount"'].Name'`
-		bucketcreatedate=`echo $returnList | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $1 }'`
-		bucketcreatetime=`echo $returnList | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $2 }' | awk -F. '{ print $1 }'`
-		echo "Bucket Number: $loopcount"
-		echo "Bucket Name: $bucketname"
-		echo "Bucket Create Date: $bucketcreatedate"
-		echo "Bucket Create Time: $bucketcreatetime"
+		bucketname=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].Name'`
+		bucketcreatedate=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $1 }'`
+		bucketcreatetime=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $2 }' | awk -F. '{ print $1 }'`
+		echo "Bucket Number: $loopcount" >> $AWS_BUCKET_FILE_PRETTY
+		echo "Bucket Name: $bucketname" >> $AWS_BUCKET_FILE_PRETTY
+		echo "Bucket Create Date: $bucketcreatedate" >> $AWS_BUCKET_FILE_PRETTY
+		echo "Bucket Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
 		let loopcount=loopcount+1
 	done
+	$returnListFormatted=`cat $AWS_BUCKET_FILE_PRETTY`
+	agentSendLogMessage $returnListFormatted
 }
 
 # Main
