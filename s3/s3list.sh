@@ -35,7 +35,7 @@ configureAWSCli() {
 }
 
 listAWSBuckets() {
-	agentSendLogMessage "Listing AWS S3 Buckets..."
+	agentSendLogMessage "Listing AWS S3 Buckets with command: $INSTALL_DIR/bin/aws s3api list-buckets"
 	returnList=`$INSTALL_DIR/bin/aws s3api list-buckets`
 	agentSendLogMessage $returnList
 }
