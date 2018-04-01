@@ -71,7 +71,7 @@ createAWSEfs() {
 	agentSendLogMessage "Creating AWS EFS file system with command: $AWS_INSTALL_DIR/bin/aws efs create-file-system --performance-mode $PERFORMANCE_MODE --no-encrypted --creation-token $CREATION_TOKEN"
 
 	$AWS_INSTALL_DIR/bin/aws efs create-file-system --performance-mode $PERFORMANCE_MODE --no-encrypted --creation-token $CREATION_TOKEN
-	$AWS_INSTALL_DIR/bin/aws efs describe-file-systems >  > $AWS_EFS_FILE_JSON
+	$AWS_INSTALL_DIR/bin/aws efs describe-file-systems > $AWS_EFS_FILE_JSON
 	agentSendLogMessage "JSON Format"
 	agentSendLogMessage `cat $AWS_EFS_FILE_JSON`
 }
