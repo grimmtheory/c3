@@ -14,7 +14,7 @@ agentSendLogMessage "** S3 Bucket Creation Service Starting **"
 installAWSCli() {
     agentSendLogMessage "Installing AWS CLI tools..."
         if [ type aws > /dev/null ]; then
-            agentSendLogMessage  "AWS CLI already installed skipping the AWS CLI Install";
+            agentSendLogMessage  "AWS CLI already installed skipping the AWS CLI Install"
         else
             mkdir -p $INSTALL_DIR; cd $INSTALL_DIR
             wget https://s3.amazonaws.com/aws-cli/awscli-bundle.zip; unzip awscli-bundle.zip
@@ -36,9 +36,9 @@ configureAWSCli() {
 
 createAWSBucket() {
 	agentSendLogMessage "Creating AWS S3 Bucket..."
-	returnList=`$INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME \
-	--region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION`
-	agentSendLogMessage $returnList
+	$INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME \
+	--region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
+	sleep 10
 }
 
 listAWSBuckets() {
