@@ -1,6 +1,6 @@
 #!/bin/bash
-# Title		: s3list.sh
-# Description	: Lifecycle action script for listing AWS S3 buckets.
+# Title		: efslist.sh
+# Description	: Lifecycle action script for listing AWS efs file systems.
 # Author	: jasgrimm
 # Date		: 2018-04-01
 # Version	: 0.1
@@ -24,8 +24,8 @@ PATH=$PATH:$AWS_INSTALL_DIR/bin
 AWS_CONFIG_DIR="/root/.aws"
 AWS_CONFIG_FILE="$AWS_CONFIG_DIR/config"
 AWS_CRED_FILE="$AWS_CONFIG_DIR/credentials"
-AWS_BUCKET_FILE_JSON="/root/bucketlist.json.txt"
-AWS_BUCKET_FILE_PRETTY="/root/bucketlist.pretty.txt"
+AWS_EFS_FILE_JSON="/root/bucketlist.json.txt"
+AWS_EFS_FILE_PRETTY="/root/bucketlist.pretty.txt"
 
 # Install prerequisites
 installPrerequisites() {
@@ -67,35 +67,38 @@ configureAWSCli() {
 	chmod 600 $AWS_CRED_FILE
 }
 
-listAWSBuckets() {
-	agentSendLogMessage "Listing AWS S3 Buckets with command: $AWS_INSTALL_DIR/bin/aws s3api list-buckets"
+listAWSEfs() {
+	agentSendLogMessage "Listing AWS EFS file systems with command: $AWS_INSTALL_DIR/bin/aws efs describe-file-systems"
 
-	$AWS_INSTALL_DIR/bin/aws s3api list-buckets > $AWS_BUCKET_FILE_JSON
+	$AWS_INSTALL_DIR/bin/aws efs describe-file-systems > $AWS_EFS_FILE_JSON
 	agentSendLogMessage "JSON Format"
-	agentSendLogMessage `cat $AWS_BUCKET_FILE_JSON`
+	agentSendLogMessage `cat $AWS_EFS_FILE_JSON`
 
 	agentSendLogMessage "List Format"
-	echo "" > $AWS_BUCKET_FILE_PRETTY
+	echo "" > $AWS_EFS_FILE_PRETTY
 	loopcount=0
-	bucketcount=`cat $AWS_BUCKET_FILE_JSON | grep Creation | wc -l`
-	while [ $loopcount -lt $bucketcount ]; do
-		bucketname=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].Name' | sed -e 's/"//g'`
-		bucketcreatedate=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $1 }' | sed -e 's/"//g'`
-		bucketcreatetime=`cat $AWS_BUCKET_FILE_JSON | jq '.Buckets['"$loopcount"'].CreationDate' | awk -F\T '{ print $2 }' | awk -F. '{ print $1 }'`
-		echo "Bucket # $loopcount  ---  Name: $bucketname  ---  Create Date: $bucketcreatedate  ---  Create Time: $bucketcreatetime" >> $AWS_BUCKET_FILE_PRETTY
+	efscount=`cat $AWS_EFS_FILE_JSON | grep CreationToken | wc -l`
+	while [ $loopcount -lt $efscount ]; do
+		efsid=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].FileSystemId' | sed -e 's/"//g'`
+		efsperformancemode=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].efsperformancemode' | awk -F\T '{ print $1 }' | sed -e 's/"//g'`
+		efscreatetime=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].CreationTime'`
+		efscreatetime=`date -d @$efscreatetime`
+		efsstate=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].LifeCycleState'`
+		efsencryption=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].Encrypted'`
+		echo "FileSystem # $loopcount  --  ID: $efsid  --  Create Date: $efscreatetime  --  State: $efsstate -- Encryption: $efsencryption -- Type: $efsperformancemode" >> $AWS_BUCKET_FILE_PRETTY
 		let loopcount=loopcount+1
 	done
-	while read line; do agentSendLogMessage "$line"; done < $AWS_BUCKET_FILE_PRETTY
+	while read line; do agentSendLogMessage "$line"; done < $AWS_EFS_FILE_PRETTY
 }
 
 # Main
-agentSendLogMessage "** S3 Bucket List Service Starting **"
+agentSendLogMessage "** EFS File System List Service Starting **"
 
 installPrerequisites
 installAWSCli
 configureAWSCli
-listAWSBuckets
+listAWSEfs
 
-agentSendLogMessage "** S3 Bucket List Service Complete **"
+agentSendLogMessage "** EFS File System List Service Complete **"
 
 exit 0
