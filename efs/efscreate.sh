@@ -76,13 +76,42 @@ createAWSEfs() {
 	agentSendLogMessage `cat $AWS_EFS_FILE_JSON`
 }
 
+listAWSEfs() {
+	agentSendLogMessage "Listing AWS EFS file systems with command: $AWS_INSTALL_DIR/bin/aws efs describe-file-systems"
+
+	$AWS_INSTALL_DIR/bin/aws efs describe-file-systems > $AWS_EFS_FILE_JSON
+	agentSendLogMessage "JSON Format"
+	agentSendLogMessage `cat $AWS_EFS_FILE_JSON`
+
+	agentSendLogMessage "List Format"
+	echo "" > $AWS_EFS_FILE_PRETTY
+	loopcount=0
+	efscount=`cat $AWS_EFS_FILE_JSON | grep FileSystemId | wc -l`
+	while [ $loopcount -lt $efscount ]; do
+		efsid=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].FileSystemId'`
+		efsperformancemode=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].PerformanceMode'`
+		efscreatetime=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].CreationTime'`; efscreatetime=`date -d @$efscreatetime | awk '{ print $1 "." $2 "." $3 "." $4 "." $5 }'`
+		efsstate=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].LifeCycleState'`
+		efsencryption=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].Encrypted'`
+		efsownerid=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].OwnerId'`
+		efstargets=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].NumberOfMountTargets'`
+		efscreationtoken=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].CreationToken'`
+		echo "EFS # $loopcount -- ID: $efsid -- Create Date: $efscreatetime -- State: $efsstate -- Encryption: $efsencryption -- Type: $efsperformancemode -- OwnerID: $efsownerid -- Targets: $efstargets -- Token: $efscreationtoken" >> $AWS_EFS_FILE_PRETTY
+		let loopcount=loopcount+1
+	done
+	sed -i -e 's/"//g' $AWS_EFS_FILE_PRETTY
+	while read line; do agentSendLogMessage "$line"; done < $AWS_EFS_FILE_PRETTY
+}
+
 # Main
 agentSendLogMessage "** EFS File System Create Service Starting **"
 
 installPrerequisites
 installAWSCli
 configureAWSCli
+listAWSEfs
 createAWSEfs
+listAWSEfs
 
 agentSendLogMessage "** EFS File System Create Service Complete **"
 
