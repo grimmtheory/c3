@@ -30,11 +30,20 @@ AWS_EFS_FILE_PRETTY="/root/efslist.pretty.txt"
 # Install prerequisites
 installPrerequisites() {
 	agentSendLogMessage "Installing prerequisites..."
+	agentSendLogMessage "Checking for jq and bc..."
+
 	if [ -f /bin/jq ]; then
-		agentSendLogMessage "JQ is already installed, skipping install."
+		agentSendLogMessage "jq is already installed, skipping install."
 	else
-		agentSendLogMessage "JQ is not installed, installing now."
+		agentSendLogMessage "jq is not installed, installing now."
 		yum -y --skip-broken install jq
+	fi
+
+	if [ -f /bin/bc ]; then
+		agentSendLogMessage "bc is already installed, skipping install."
+	else
+		agentSendLogMessage "bc is not installed, installing now."
+		yum -y --skip-broken install bc
 	fi
 }
 
@@ -87,7 +96,8 @@ listAWSEfs() {
 		efsownerid=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].OwnerId'`
 		efstargets=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].NumberOfMountTargets'`
 		efscreationtoken=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].CreationToken'`
-		echo "EFS # $loopcount -- ID: $efsid -- Create Date: $efscreatetime -- State: $efsstate -- Encryption: $efsencryption -- Type: $efsperformancemode -- OwnerID: $efsownerid -- Targets: $efstargets -- Token: efscreationtoken" >> $AWS_EFS_FILE_PRETTY
+		efssize=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].SizeInBytes.Value'`; efssize=`echo "scale=4; $efssize / 8 / 1024 / 1024" | bc`
+		echo "EFS # $loopcount -- ID: $efsid -- Create Date: $efscreatetime -- State: $efsstate -- Encryption: $efsencryption -- Type: $efsperformancemode -- OwnerID: $efsownerid -- Targets: $efstargets -- Token: $efscreationtoken -- Size: $efssize GB" >> $AWS_EFS_FILE_PRETTY
 		let loopcount=loopcount+1
 	done
 	sed -i -e 's/"//g' $AWS_EFS_FILE_PRETTY
