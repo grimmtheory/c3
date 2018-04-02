@@ -24,8 +24,8 @@ PATH=$PATH:$AWS_INSTALL_DIR/bin
 AWS_CONFIG_DIR="/root/.aws"
 AWS_CONFIG_FILE="$AWS_CONFIG_DIR/config"
 AWS_CRED_FILE="$AWS_CONFIG_DIR/credentials"
-AWS_EFS_FILE_JSON="/root/bucketlist.json.txt"
-AWS_EFS_FILE_PRETTY="/root/bucketlist.pretty.txt"
+AWS_EFS_FILE_JSON="/root/efslist.json.txt"
+AWS_EFS_FILE_PRETTY="/root/efslist.pretty.txt"
 
 # Install prerequisites
 installPrerequisites() {
@@ -77,17 +77,17 @@ listAWSEfs() {
 	agentSendLogMessage "List Format"
 	echo "" > $AWS_EFS_FILE_PRETTY
 	loopcount=0
-	efscount=`cat $AWS_EFS_FILE_JSON | grep CreationToken | wc -l`
+	efscount=`cat $AWS_EFS_FILE_JSON | grep FileSystemId | wc -l`
 	while [ $loopcount -lt $efscount ]; do
-		efsid=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].FileSystemId' | sed -e 's/"//g'`
-		efsperformancemode=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].efsperformancemode' | awk -F\T '{ print $1 }' | sed -e 's/"//g'`
-		efscreatetime=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].CreationTime'`
-		efscreatetime=`date -d @$efscreatetime`
+		efsid=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].FileSystemId'`
+		efsperformancemode=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].PerformanceMode'`
+		efscreatetime=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].CreationTime'`; efscreatetime=`date -d @$efscreatetime`
 		efsstate=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].LifeCycleState'`
 		efsencryption=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].Encrypted'`
 		echo "FileSystem # $loopcount  --  ID: $efsid  --  Create Date: $efscreatetime  --  State: $efsstate -- Encryption: $efsencryption -- Type: $efsperformancemode" >> $AWS_BUCKET_FILE_PRETTY
 		let loopcount=loopcount+1
 	done
+	sed -i -e 's/"//g' $AWS_EFS_FILE_PRETTY
 	while read line; do agentSendLogMessage "$line"; done < $AWS_EFS_FILE_PRETTY
 }
 
