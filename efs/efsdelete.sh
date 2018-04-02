@@ -78,8 +78,10 @@ configureAWSCli() {
 
 deleteAWSEfs() {
 	agentSendLogMessage "Deleting AWS EFS file system with command: $AWS_INSTALL_DIR/bin/aws efs delete-file-system --file-system-id $EFS_ID"
-
 	$AWS_INSTALL_DIR/bin/aws efs delete-file-system --file-system-id $EFS_ID
+	$AWS_INSTALL_DIR/bin/aws efs describe-file-systems > $AWS_EFS_FILE_JSON
+	agentSendLogMessage "AWS EFS file system delete Complete."
+	sleep 10
 }
 
 listAWSEfs() {

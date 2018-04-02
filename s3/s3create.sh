@@ -95,6 +95,7 @@ listAWSBuckets() {
 	while read line; do agentSendLogMessage "$line"; done < $AWS_BUCKET_FILE_PRETTY
 }
 
+# Main
 agentSendLogMessage "#### S3 BUCKET CREATE SERVICE STARTING ####"
 
 installPrerequisites

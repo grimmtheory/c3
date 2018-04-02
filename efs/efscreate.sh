@@ -78,9 +78,10 @@ configureAWSCli() {
 
 createAWSEfs() {
 	agentSendLogMessage "Creating AWS EFS file system with command: $AWS_INSTALL_DIR/bin/aws efs create-file-system --performance-mode $PERFORMANCE_MODE --no-encrypted --creation-token $CREATION_TOKEN"
-
 	$AWS_INSTALL_DIR/bin/aws efs create-file-system --performance-mode $PERFORMANCE_MODE --no-encrypted --creation-token $CREATION_TOKEN
 	$AWS_INSTALL_DIR/bin/aws efs describe-file-systems > $AWS_EFS_FILE_JSON
+	agentSendLogMessage "AWS EFS file system create Complete."
+	sleep 10
 }
 
 listAWSEfs() {
