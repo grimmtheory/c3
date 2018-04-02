@@ -1,22 +1,29 @@
 #!/bin/bash
+
+cat <<EOF >/home/cliqruser/post-init.sh
 # Source some cliqr variables and scripts
-. /usr/local/osmosix/etc/.osmosix.sh
-. /usr/local/osmosix/etc/userenv
-. /usr/local/osmosix/service/utils/cfgutil.sh
-. /usr/local/osmosix/service/utils/agent_util.sh
+sudo . /usr/local/osmosix/etc/.osmosix.sh
+sudo . /usr/local/osmosix/etc/userenv
+sudo . /usr/local/osmosix/service/utils/cfgutil.sh
+sudo . /usr/local/osmosix/service/utils/agent_util.sh
 
-agentSendLogMessage "Starting post-init stuff..."
+sudo agentSendLogMessage "Starting post-init stuff..."
 
-agentSendLogMessage "Adding cliqruser and centos users to sudoers..."
-usermod -aG wheel centos; usermod -aG wheel cliqruser
+sudo agentSendLogMessage "Adding cliqruser and centos users to sudoers..."
+sudo usermod -aG wheel centos; usermod -aG wheel cliqruser
 
-agentSendLogMessage "Adding a new key to /home/$my_user/.ssh/authorized_keys..."
-echo "## Dynamically inserted key ##" >> /home/$my_user/.ssh/authorized_keys
-echo $my_key >> /home/$my_user/.ssh/authorized_keys
+sudo agentSendLogMessage "Adding a new key to /home/$my_user/.ssh/authorized_keys..."
+sudo echo "## Dynamically inserted key ##" >> /home/$my_user/.ssh/authorized_keys
+sudo echo $my_key >> /home/$my_user/.ssh/authorized_keys
 
-agentSendLogMessage "Appending /home/cliqruser/.ssh/authorized_keys to /home/centos/.ssh/authorized_keys..."
-echo "" >> /home/$centos/.ssh/authorized_keys
-echo "## Copied over keys ##" >> /home/centos/.ssh/authorized_keys
-cat /home/cliqruser/.ssh/authorized_keys >> /home/centos/.ssh/authorized_keys
+sudo agentSendLogMessage "Appending /home/cliqruser/.ssh/authorized_keys to /home/centos/.ssh/authorized_keys..."
+sudo echo "" >> /home/$centos/.ssh/authorized_keys
+sudo echo "## Copied over keys ##" >> /home/centos/.ssh/authorized_keys
+sudo cat /home/cliqruser/.ssh/authorized_keys >> /home/centos/.ssh/authorized_keys
+EOF
+
+cd /home/cliqruser
+chmod +x ./post-init.sh
+./post-init.sh
 
 exit 0
