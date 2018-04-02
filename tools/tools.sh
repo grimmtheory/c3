@@ -1,4 +1,10 @@
 #!/bin/bash
+# Source some cliqr variables and scripts
+. /usr/local/osmosix/etc/.osmosix.sh
+. /usr/local/osmosix/etc/userenv
+. /usr/local/osmosix/service/utils/cfgutil.sh
+. /usr/local/osmosix/service/utils/agent_util.sh
+
 agentSendLogMessage "Starting post-init stuff..."
 
 agentSendLogMessage "Adding cliqruser to /etc/sudoers..."
