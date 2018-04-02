@@ -4,7 +4,7 @@
 # Author	: jasgrimm
 # Date		: 2018-04-01
 # Version	: 0.1
-# Usage		: bash s3list.sh
+# Usage		: bash efslist.sh
 # External Vars	: Read in at run time - $AWS_REGION, $AWS_ACCESS_KEY_ID, and $AWS_SECRET_ACCESS_KEY
 # Internal Vars	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
 
@@ -81,10 +81,13 @@ listAWSEfs() {
 	while [ $loopcount -lt $efscount ]; do
 		efsid=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].FileSystemId'`
 		efsperformancemode=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].PerformanceMode'`
-		efscreatetime=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].CreationTime'`; efscreatetime=`date -d @$efscreatetime`
+		efscreatetime=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].CreationTime'`; efscreatetime=`date -d @$efscreatetime | awk '{ print $1 "." $2 "." $3 "." $4 "." $5 }'`
 		efsstate=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].LifeCycleState'`
 		efsencryption=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].Encrypted'`
-		echo "FileSystem # $loopcount  --  ID: $efsid  --  Create Date: $efscreatetime  --  State: $efsstate -- Encryption: $efsencryption -- Type: $efsperformancemode" >> $AWS_EFS_FILE_PRETTY
+		efsownerid=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].OwnerId'`
+		efstargets=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].NumberOfMountTargets'`
+		efscreationtoken=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].CreationToken'`
+		echo "EFS # $loopcount -- ID: $efsid -- Create Date: $efscreatetime -- State: $efsstate -- Encryption: $efsencryption -- Type: $efsperformancemode -- OwnerID: $efsownerid -- Targets: $efstargets -- Token: efscreationtoken" >> $AWS_EFS_FILE_PRETTY
 		let loopcount=loopcount+1
 	done
 	sed -i -e 's/"//g' $AWS_EFS_FILE_PRETTY
