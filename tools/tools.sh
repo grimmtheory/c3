@@ -8,14 +8,15 @@
 agentSendLogMessage "Starting post-init stuff..."
 
 agentSendLogMessage "Adding cliqruser to /etc/sudoers..."
-echo "cliqruser  ALL= NOPASSWD: ALL" >> /etc/sudoers
-agentSendLogMessage "Last line of /etc/sudoers"
-agentSendLogMessage `tail -n 1 /etc/sudoers`
+usermod -aG wheel centos; usermod -aG wheel cliqruser
 
 agentSendLogMessage "Adding a new key to /home/$my_user/.ssh/authorized_keys..."
+echo "" >> /home/$my_user/.ssh/authorized_keys
 echo $my_key >> /home/$my_user/.ssh/authorized_keys
 
 agentSendLogMessage "Appending /home/cliqruser/.ssh/authorized_keys to /home/centos/.ssh/authorized_keys..."
-echo "cliqruser  ALL= NOPASSWD: ALL" >> /etc/sudoers
+echo "" >> /home/$centos/.ssh/authorized_keys
+echo "## Copied over keys ##" >> /home/centos/.ssh/authorized_keys
+cat /home/cliqruser/.ssh/authorized_keys >> /home/centos/.ssh/authorized_keys
 
 exit 0
