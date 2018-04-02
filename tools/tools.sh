@@ -7,11 +7,11 @@
 
 agentSendLogMessage "Starting post-init stuff..."
 
-agentSendLogMessage "Adding cliqruser to /etc/sudoers..."
+agentSendLogMessage "Adding cliqruser and centos users to sudoers..."
 usermod -aG wheel centos; usermod -aG wheel cliqruser
 
 agentSendLogMessage "Adding a new key to /home/$my_user/.ssh/authorized_keys..."
-echo "" >> /home/$my_user/.ssh/authorized_keys
+echo "## Dynamically inserted key" >> /home/$my_user/.ssh/authorized_keys
 echo $my_key >> /home/$my_user/.ssh/authorized_keys
 
 agentSendLogMessage "Appending /home/cliqruser/.ssh/authorized_keys to /home/centos/.ssh/authorized_keys..."
