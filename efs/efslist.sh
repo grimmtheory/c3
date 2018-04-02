@@ -84,7 +84,7 @@ listAWSEfs() {
 		efscreatetime=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].CreationTime'`; efscreatetime=`date -d @$efscreatetime`
 		efsstate=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].LifeCycleState'`
 		efsencryption=`cat $AWS_EFS_FILE_JSON | jq '.FileSystems['"$loopcount"'].Encrypted'`
-		echo "FileSystem # $loopcount  --  ID: $efsid  --  Create Date: $efscreatetime  --  State: $efsstate -- Encryption: $efsencryption -- Type: $efsperformancemode" >> $AWS_BUCKET_FILE_PRETTY
+		echo "FileSystem # $loopcount  --  ID: $efsid  --  Create Date: $efscreatetime  --  State: $efsstate -- Encryption: $efsencryption -- Type: $efsperformancemode" >> $AWS_EFS_FILE_PRETTY
 		let loopcount=loopcount+1
 	done
 	sed -i -e 's/"//g' $AWS_EFS_FILE_PRETTY
