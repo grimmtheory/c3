@@ -1,11 +1,11 @@
 #!/bin/bash
-# Title		: efscreate.sh
+# Title		: efsdelete.sh
 # Description	: Lifecycle action script for creating AWS efs file systems.
 # Author	: jasgrimm
 # Date		: 2018-04-01
 # Version	: 0.1
-# Usage		: bash efscreate.sh
-# External Vars	: Read in at run time - $PERFORMANCE_MODE, $EFS_TOKEN, $AWS_REGION, $AWS_ACCESS_KEY_ID, and $AWS_SECRET_ACCESS_KEY
+# Usage		: bash efsdelete.sh
+# External Vars	: Read in at run time - $EFS_ID, $EFS_TOKEN, $AWS_REGION, $AWS_ACCESS_KEY_ID, and $AWS_SECRET_ACCESS_KEY
 # Internal Vars	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
 
 # If running as an "external-service", execute and terminate docker container on the orchestrator
@@ -76,13 +76,10 @@ configureAWSCli() {
 	chmod 600 $AWS_CRED_FILE
 }
 
-createAWSEfs() {
-	agentSendLogMessage "Creating AWS EFS file system with command: $AWS_INSTALL_DIR/bin/aws efs create-file-system --performance-mode $PERFORMANCE_MODE --no-encrypted --creation-token $CREATION_TOKEN"
+deleteAWSEfs() {
+	agentSendLogMessage "Deleting AWS EFS file system with command: $AWS_INSTALL_DIR/bin/aws efs delete-file-system --file-system-id $EFS_ID"
 
-	$AWS_INSTALL_DIR/bin/aws efs create-file-system --performance-mode $PERFORMANCE_MODE --no-encrypted --creation-token $CREATION_TOKEN
-	$AWS_INSTALL_DIR/bin/aws efs describe-file-systems > $AWS_EFS_FILE_JSON
-	agentSendLogMessage "JSON Format"
-	agentSendLogMessage `cat $AWS_EFS_FILE_JSON`
+	$AWS_INSTALL_DIR/bin/aws efs delete-file-system --file-system-id $EFS_ID
 }
 
 listAWSEfs() {
@@ -120,7 +117,7 @@ installPrerequisites
 installAWSCli
 configureAWSCli
 listAWSEfs
-createAWSEfs
+deleteAWSEfs
 listAWSEfs
 
 agentSendLogMessage "** EFS File System Create Service Complete **"
