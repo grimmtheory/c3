@@ -111,7 +111,7 @@ listAWSEfs() {
 }
 
 # Main
-agentSendLogMessage "** EFS File System Create Service Starting **"
+agentSendLogMessage "#### EFS FILE SYSTEM DELETE SERVICE STARTING ####"
 
 installPrerequisites
 installAWSCli
@@ -120,6 +120,6 @@ listAWSEfs
 deleteAWSEfs
 listAWSEfs
 
-agentSendLogMessage "** EFS File System Create Service Complete **"
+agentSendLogMessage "#### EFS FILE SYSTEM DELETE SERVICE COMPLETE ####"
 
 exit 0

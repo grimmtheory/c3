@@ -95,6 +95,8 @@ listAWSBuckets() {
 	while read line; do agentSendLogMessage "$line"; done < $AWS_BUCKET_FILE_PRETTY
 }
 
+agentSendLogMessage "#### S3 BUCKET DELETE SERVICE STARTING ####"
+
 installPrerequisites
 installAWSCli
 configureAWSCli
@@ -102,6 +104,6 @@ listAWSBuckets
 deleteAWSBucket
 listAWSBuckets
 
-agentSendLogMessage "** S3 Bucket Delete Service Complete **"
+agentSendLogMessage "#### S3 BUCKET DELETE SERVICE COMPLETE ####"
 
 exit 0

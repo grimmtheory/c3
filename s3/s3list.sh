@@ -89,13 +89,13 @@ listAWSBuckets() {
 }
 
 # Main
-agentSendLogMessage "** S3 Bucket List Service Starting **"
+agentSendLogMessage "#### S3 LIST SERVICE STARTING ####"
 
 installPrerequisites
 installAWSCli
 configureAWSCli
 listAWSBuckets
 
-agentSendLogMessage "** S3 Bucket List Service Complete **"
+agentSendLogMessage "#### S3 LIST SERVICE COMPLETE ####"
 
 exit 0

@@ -105,13 +105,13 @@ listAWSEfs() {
 }
 
 # Main
-agentSendLogMessage "** EFS File System List Service Starting **"
+agentSendLogMessage "#### EFS FILE SYSTEM LIST SERVICE STARTING ####"
 
 installPrerequisites
 installAWSCli
 configureAWSCli
 listAWSEfs
 
-agentSendLogMessage "** EFS File System List Service Complete **"
+agentSendLogMessage "#### EFS FILE SYSTEM LIST SERVICE COMPLETE ####"
 
 exit 0
