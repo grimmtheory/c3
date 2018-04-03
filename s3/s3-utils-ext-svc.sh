@@ -6,6 +6,7 @@
 # Version	: 0.1
 # Usage		: bash s3-utils-ext-svc.sh $cmd (defaults to start), FUNCTION=$function < pulled in from service paramater passed
 # External Vars	: Read in at run time - $BUCKET_NAME, $FUNCTION which is a pick list of "LB", "CB", "DB" for list, create, or delete
+#				  aws_access_key_id and aws_secret_access_key
 # Internal Vars	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
 
 # If running as an "external-service" (default)
@@ -25,6 +26,8 @@ CMD=$1
 FUNCTION=$function
 AWS_INSTALL_DIR="/usr/local/aws"
 PATH=$PATH:$AWS_INSTALL_DIR/bin
+AWS_ACCESS_KEY_ID=$aws_access_key_id
+AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
 AWS_CONFIG_DIR="/root/.aws"
 AWS_CONFIG_FILE="$AWS_CONFIG_DIR/config"
 AWS_CRED_FILE="$AWS_CONFIG_DIR/credentials"
