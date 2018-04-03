@@ -108,7 +108,7 @@ case $CMD in
 	start)
 		case $FUNCTION in
 			LB)
-				istAWSBuckets
+				listAWSBuckets
 				;;
 			CB)
 				;;
