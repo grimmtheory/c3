@@ -5,8 +5,7 @@
 # Date		: 2018-04-03
 # Version	: 0.1
 # Usage		: bash s3-utils-ext-svc.sh $cmd (defaults to start), FUNCTION=$function < pulled in from service paramater passed
-# External Vars	: Read in at run time - $bucket_name, $function which is a pick list of "LB", "CB", "DB" for list, create, or delete
-#				  aws_access_key_id and aws_secret_access_key, aws_region
+# External Vars	: Read in at run time are $FUNCTION, $BUCKET_NAME, $AWS_REGION, $AWS_ACCESS_KEY_ID, $AWS_SECRET_ACCESS_KEY
 # Internal Vars	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
 
 # If running as an "external-service" (default)
@@ -22,15 +21,14 @@
 print_log "$(env)"
 
 # Declare / configure internal vars
-# Global variables
-FUNCTION=$function
-BUCKET_NAME=$bucket_name
-AWS_REGION=$aws_region
-AWS_ACCESS_KEY_ID=$aws_access_key_id
-AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
+# Inherited Global variables
+# FUNCTION = LB,CB, or DB for list, create, or delete bucket
+# BUCKET_NAME = Name of the bucket
+# AWS_REGION=$aws_region
+# AWS_ACCESS_KEY_ID=$aws_access_key_id
+# AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
 
 # Local variables
-CMD=$1
 PATH=$PATH:$AWS_INSTALL_DIR/bin
 AWS_INSTALL_DIR="/usr/local/aws"
 AWS_CONFIG_DIR="/root/.aws"
@@ -116,7 +114,7 @@ installAWSCli
 configureAWSCli
 
 ## Cases
-case $CMD in
+case "$1" in
 	start)
 		print "Starting service..."
 		case $FUNCTION in
