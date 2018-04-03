@@ -22,11 +22,12 @@ print_log "$(env)"
 
 # Declare / configure internal vars
 # Inherited Global variables
-# FUNCTION = LB,CB, or DB for list, create, or delete bucket
-# BUCKET_NAME = Name of the bucket
-# AWS_REGION=$aws_region
-# AWS_ACCESS_KEY_ID=$aws_access_key_id
-# AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
+export CMD=$1 # start, stop, suspend, resume, update
+export FUNCTION=$FUNCTION # LB,CB, or DB for list, create, or delete bucket
+export BUCKET_NAME=$BUCKET_NAME # Name of the bucket
+export AWS_REGION=$AWS_REGION # AWS region
+export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID # AWS access key id
+export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY # AWS secret access key
 
 # Local variables
 PATH=$PATH:$AWS_INSTALL_DIR/bin
