@@ -1,6 +1,6 @@
 #!/bin/bash
 # Title		: s3-utils-ext-svc.sh
-# Description	: External service for creating, deleting, and listing AWS S3 buckets.
+# Description	: An external utility service for AWS s3 functions, e.g. list, create, and delete buckets.
 # Author	: jasgrimm
 # Date		: 2018-04-03
 # Version	: 0.1
@@ -102,17 +102,21 @@ configureAWSCli
 
 ## Cases
 case $CMD in
-     start)
-          case $FUNCTION in
-               LB)
-                    listAWSBuckets
-                    ;;
-               CB)
-                    ;;
-                DB
-                	;;
-          esac
-          ;;
+	start)
+		case $FUNCTION in
+			LB)
+				istAWSBuckets
+				;;
+			CB)
+				;;
+			DB)
+				;;
+			*)
+				;;
+		esac
+		;;
+	*)
+		;;
 esac
 
 print_log "#### S3 UTILITY SERVICE COMPLETE ####"
