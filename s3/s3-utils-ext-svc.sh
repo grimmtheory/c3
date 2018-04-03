@@ -5,8 +5,8 @@
 # Date		: 2018-04-03
 # Version	: 0.1
 # Usage		: bash s3-utils-ext-svc.sh $cmd (defaults to start), FUNCTION=$function < pulled in from service paramater passed
-# External Vars	: Read in at run time - $BUCKET_NAME, $FUNCTION which is a pick list of "LB", "CB", "DB" for list, create, or delete
-#				  aws_access_key_id and aws_secret_access_key
+# External Vars	: Read in at run time - $bucket_name, $function which is a pick list of "LB", "CB", "DB" for list, create, or delete
+#				  aws_access_key_id and aws_secret_access_key, aws_region
 # Internal Vars	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
 
 # If running as an "external-service" (default)
@@ -22,12 +22,17 @@
 print_log "$(env)"
 
 # Declare / configure internal vars
-CMD=$1
+# Global variables
 FUNCTION=$function
-AWS_INSTALL_DIR="/usr/local/aws"
-PATH=$PATH:$AWS_INSTALL_DIR/bin
+BUCKET_NAME=$bucket_name
+AWS_REGION=$aws_region
 AWS_ACCESS_KEY_ID=$aws_access_key_id
 AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
+
+# Local variables
+CMD=$1
+PATH=$PATH:$AWS_INSTALL_DIR/bin
+AWS_INSTALL_DIR="/usr/local/aws"
 AWS_CONFIG_DIR="/root/.aws"
 AWS_CONFIG_FILE="$AWS_CONFIG_DIR/config"
 AWS_CRED_FILE="$AWS_CONFIG_DIR/credentials"
@@ -95,6 +100,13 @@ listAWSBuckets() {
 	while read line; do print_log "$line"; done < $AWS_BUCKET_FILE_PRETTY
 }
 
+createAWSBucket() {
+	agentSendLogMessage "Creating AWS S3 Bucket: $AWS_INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION"
+	$AWS_INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
+	agentSendLogMessage "AWS S3 Bucket Create Complete."
+	sleep 10
+}
+
 # Main
 print_log "#### S3 UTILITY SERVICE STARTING ####"
 
@@ -106,6 +118,7 @@ configureAWSCli
 ## Cases
 case $CMD in
 	start)
+		print "Starting service..."
 		case $FUNCTION in
 			LB)
 				listAWSBuckets
@@ -117,6 +130,22 @@ case $CMD in
 			*)
 				;;
 		esac
+		;;
+	stop)
+		print_log "Stopping service..."
+		exit 0
+		;;
+	suspend)
+		print_log "Suspending service..."
+		exit 0
+		;;
+	resume)
+		print_log "Resuming service..."
+		exit 0
+		;;
+	update)
+		print_log "Updating service..."
+		exit 0
 		;;
 	*)
 		;;
