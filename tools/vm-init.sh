@@ -37,6 +37,7 @@ fi
 sudo agentSendLogMessage "Adding cliqruser and $MY_USER users to sudoers..."
 sudo usermod -aG wheel $MY_USER
 sudo usermod -aG wheel cliqruser
+sudo -i bash -c "echo \"$MY_USER  ALL= NOPASSWD: ALL\" >> /etc/sudoers"
 
 sudo agentSendLogMessage "Adding a new key to cliqruser and $MY_USER authorized_keys..."
 echo "## Dynamically inserted key ##" >> /home/cliqruser/.ssh/authorized_keys
