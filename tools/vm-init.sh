@@ -19,7 +19,7 @@ CLIQR_HOME=/usr/local/osmosix
 # Main
 sudo agentSendLogMessage "### STARTING VM POST-INIT ###"
 
-# Creating new user
+## Create new user
 sudo agentSendLogMessage "Creating new user..."
 if [ -d /home/$MY_USER ]; then
 	sudo agentSendLogMessage "$MY_USER already exists."
@@ -34,11 +34,13 @@ else
 	sudo agentSendLogMessage "New user $MY_USER created."
 fi
 
+## Add user to sudoers
 sudo agentSendLogMessage "Adding cliqruser and $MY_USER users to sudoers..."
 sudo usermod -aG wheel $MY_USER
 sudo usermod -aG wheel cliqruser
 sudo -i bash -c "echo \"$MY_USER  ALL= NOPASSWD: ALL\" >> /etc/sudoers"
 
+## Insert keys for new user
 sudo agentSendLogMessage "Adding a new key to cliqruser and $MY_USER authorized_keys..."
 echo "## Dynamically inserted key ##" >> /home/cliqruser/.ssh/authorized_keys
 echo $MY_KEY >> /home/cliqruser/.ssh/authorized_keys
