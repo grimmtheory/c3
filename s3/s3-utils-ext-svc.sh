@@ -95,6 +95,14 @@ createAWSBucket() {
 	sleep 10
 }
 
+# Delete AWS bucket
+deleteAWSBucket() {
+	agentSendLogMessage "Deleting AWS S3 Bucket: $AWS_INSTALL_DIR/bin/aws s3api delete-bucket --bucket $AWS_BUCKET_NAME"
+	$AWS_INSTALL_DIR/bin/aws s3api delete-bucket --bucket $AWS_BUCKET_NAME
+	agentSendLogMessage "AWS S3 Bucket Delete Complete."
+	sleep 10
+}
+
 # Main
 print_log "#### S3 UTILITY SERVICE STARTING ####"
 
@@ -115,11 +123,16 @@ case "$1" in
 			CB)
 				# List s3 buckets, create the desired bucket, and then list the s3 buckets again
 				listAWSBuckets
-				print_log "Creating s3 bucked named $AWS_BUCKET_NAME..."
+				print_log "Creating the s3 bucket named $AWS_BUCKET_NAME..."
 				createAWSBucket
 				listAWSBuckets
 				;;
 			DB)
+				# List s3 buckets, delete the desired bucket, and then list the s3 buckets again
+				listAWSBuckets
+				print_log "Deleting the s3 bucket named $AWS_BUCKET_NAME..."
+				deleteAWSBucket
+				listAWSBuckets
 				;;
 			*)
 				;;
