@@ -5,30 +5,14 @@
 # Date		: 2018-04-03
 # Version	: 0.1
 # Usage		: bash s3-utils-ext-svc.sh $cmd (defaults to start), FUNCTION=$function < pulled in from service paramater passed
-# External Vars	: Read in at run time are $FUNCTION, $BUCKET_NAME, $AWS_REGION, $AWS_ACCESS_KEY_ID, $AWS_SECRET_ACCESS_KEY
+# External Vars	: Read in at run time are $FUNCTION, $AWS_BUCKET_NAME, $AWS_REGION, $AWS_ACCESS_KEY_ID, $AWS_SECRET_ACCESS_KEY
 # Internal Vars	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
 
 # If running as an "external-service" (default)
 . /utils.sh
 
-# If running within a virtual machine
-# . /usr/local/osmosix/etc/.osmosix.sh
-# . /usr/local/osmosix/etc/userenv
-# . /usr/local/osmosix/service/utils/cfgutil.sh
-# . /usr/local/osmosix/service/utils/agent_util.sh
-
-
 # debug
-print_log "$(env)"
-
-# Declare / configure internal vars
-# Inherited Global variables
-# export CMD=$1 # start, stop, suspend, resume, update
-# export FUNCTION="$FUNCTION" # LB,CB, or DB for list, create, or delete bucket
-# export BUCKET_NAME="$BUCKET_NAME" # Name of the bucket
-# export AWS_REGION="$AWS_REGION" # AWS region
-# export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" # AWS access key id
-# export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" # AWS secret access key
+# print_log "$(env)"
 
 # Local variables
 PATH=$PATH:$AWS_INSTALL_DIR/bin
@@ -51,6 +35,7 @@ installPrerequisites() {
 }
 
 # Functions
+## Install AWS CLI tools
 installAWSCli() {
     print_log "Installing AWS CLI tools..."
 
@@ -64,6 +49,7 @@ installAWSCli() {
         fi
 }
 
+## Configure AWS CLI tools
 configureAWSCli() {
 	print_log "Configuring AWS CLI tools..."
 
@@ -79,6 +65,7 @@ configureAWSCli() {
 	chmod 600 $AWS_CRED_FILE
 }
 
+## List AWS buckets
 listAWSBuckets() {
 	print_log "Listing AWS S3 Buckets with command: $AWS_INSTALL_DIR/bin/aws s3api list-buckets"
 
@@ -100,6 +87,7 @@ listAWSBuckets() {
 	while read line; do print_log "$line"; done < $AWS_BUCKET_FILE_PRETTY
 }
 
+## Create AWS bucket
 createAWSBucket() {
 	agentSendLogMessage "Creating AWS S3 Bucket: $AWS_INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION"
 	$AWS_INSTALL_DIR/bin/aws s3api create-bucket --bucket $AWS_BUCKET_NAME --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
@@ -121,9 +109,15 @@ case "$1" in
 		print "Starting service..."
 		case $FUNCTION in
 			LB)
+				# List AWS buckets
 				listAWSBuckets
 				;;
 			CB)
+				# List s3 buckets, create the desired bucket, and then list the s3 buckets again
+				listAWSBuckets
+				print_log "Creating s3 bucked named $AWS_BUCKET_NAME..."
+				createAWSBucket
+				listAWSBuckets
 				;;
 			DB)
 				;;
