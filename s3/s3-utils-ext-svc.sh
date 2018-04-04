@@ -11,23 +11,24 @@
 # If running as an "external-service" (default)
 . /utils.sh
 
-# If running within a virtual machine (default)
+# If running within a virtual machine
 # . /usr/local/osmosix/etc/.osmosix.sh
 # . /usr/local/osmosix/etc/userenv
 # . /usr/local/osmosix/service/utils/cfgutil.sh
 # . /usr/local/osmosix/service/utils/agent_util.sh
+
 
 # debug
 print_log "$(env)"
 
 # Declare / configure internal vars
 # Inherited Global variables
-export CMD=$1 # start, stop, suspend, resume, update
-export FUNCTION=$FUNCTION # LB,CB, or DB for list, create, or delete bucket
-export BUCKET_NAME=$BUCKET_NAME # Name of the bucket
-export AWS_REGION=$AWS_REGION # AWS region
-export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID # AWS access key id
-export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY # AWS secret access key
+# export CMD=$1 # start, stop, suspend, resume, update
+# export FUNCTION="$FUNCTION" # LB,CB, or DB for list, create, or delete bucket
+# export BUCKET_NAME="$BUCKET_NAME" # Name of the bucket
+# export AWS_REGION="$AWS_REGION" # AWS region
+# export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" # AWS access key id
+# export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" # AWS secret access key
 
 # Local variables
 PATH=$PATH:$AWS_INSTALL_DIR/bin
@@ -132,21 +133,19 @@ case "$1" in
 		;;
 	stop)
 		print_log "Stopping service..."
-		exit 0
 		;;
 	suspend)
 		print_log "Suspending service..."
-		exit 0
 		;;
 	resume)
 		print_log "Resuming service..."
-		exit 0
 		;;
 	update)
 		print_log "Updating service..."
-		exit 0
 		;;
 	*)
+		print_log "Argument of $1 is unrecognized, exiting."
+		exit 1
 		;;
 esac
 
