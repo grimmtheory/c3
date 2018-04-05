@@ -12,7 +12,9 @@
 . /utils.sh
 
 # debug
-# print_log "$(env)"
+print_log "$(env)"
+print_log "$(env | grep -i cliqr)"
+print_log "$(env | grep -i ec2)"
 
 # Local variables
 PATH=$PATH:$AWS_INSTALL_DIR/bin
