@@ -1,8 +1,20 @@
 ## AWS S3 tools and services for Cisco CloudCenter
 
-1. s3service.sh - original service from Deepak Mehta (thank you)
-2. s3-upload-object.sh - object uplaod testing with curl / api only without using the aws cli
-3. s3-uitls-ext-svc.sh - External service for bucket list, create, and delete.  Written to run in a container. Works pretty well, but is still aws cli based.   
-4. s3create.sh - lifecycle action / single function, creates an s3 bucket; meant to run in an already deployed VM as a day 2 action.
-5. s3delete.sh - lifecycle action / single function, deletes an s3 bucket; meant to run in an already deployed VM as a day 2 action.
-6. s3list.sh - lifecycle action / single function, lists s3 buckets; meant to run in an already deployed VM as a day 2 action.
+### External Services
+
+- [s3service.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3service.sh) original service from Deepak Mehta (thank you)
+
+- [s3-uitls-ext-svc.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3-uitls-ext-svc.sh) External service for bucket list, create, and delete.  Written to run in a container. Works pretty well, but is still aws cli based.
+
+### Lifecycle Actions
+
+- [s3create.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3create.sh) lifecycle action, creates an s3 bucket; meant to run as a day 2 action.
+
+- [s3delete.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3delete.sh) lifecycle action, deletes an s3 bucket; meant to run as a day 2 action.
+
+- [s3list.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3list.sh) lifecycle action, lists s3 buckets; meant to run as a day 2 action.
+
+### Testing
+
+- [s3-upload-object.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3-upload-object.sh) object uplaod testing with curl / api only without using the aws cli
+
