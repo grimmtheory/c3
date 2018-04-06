@@ -4,7 +4,7 @@
 
 - [s3](https://github.com/grimmtheory/c3/tree/master/s3) - AWS S3 management tools
 
-- [EFS](https://github.com/grimmtheory/c3/tree/master/efs) - AWS EFS management tools
+- [efs](https://github.com/grimmtheory/c3/tree/master/efs) - AWS EFS management tools
 
 ### Other Stuff
 
