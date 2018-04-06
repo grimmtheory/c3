@@ -2,19 +2,19 @@
 
 ### External Services
 
-- [s3service.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3service.sh) original service from Deepak Mehta (thank you)
+- [s3service.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3service.sh) :: original service from Deepak Mehta (thank you)
 
-- [s3-uitls-ext-svc.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3-uitls-ext-svc.sh) External service for bucket list, create, and delete.  Written to run in a container. Works pretty well, but is still aws cli based.
+- [s3-uitls-ext-svc.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3-uitls-ext-svc.sh) :: External service for bucket list, create, and delete.  Written to run in a container.
 
 ### Lifecycle Actions
 
-- [s3create.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3create.sh) lifecycle action, creates an s3 bucket; meant to run as a day 2 action.
+- [s3create.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3create.sh) :: creates an s3 bucket; meant to run as a day 2 action.
 
-- [s3delete.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3delete.sh) lifecycle action, deletes an s3 bucket; meant to run as a day 2 action.
+- [s3delete.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3delete.sh) :: deletes an s3 bucket; meant to run as a day 2 action.
 
-- [s3list.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3list.sh) lifecycle action, lists s3 buckets; meant to run as a day 2 action.
+- [s3list.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3list.sh) :: lists s3 buckets; meant to run as a day 2 action.
 
 ### Testing
 
-- [s3-upload-object.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3-upload-object.sh) object uplaod testing with curl / api only without using the aws cli
+- [s3-upload-object.sh](https://github.com/grimmtheory/c3/blob/master/s3/s3-upload-object.sh) :: object uplaod testing with curl (not the aws cli)
 
