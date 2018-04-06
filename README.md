@@ -1,10 +1,7 @@
-# Tools, services, etc. written for Cisco CloudCenter
+## Tools and services written for Cisco CloudCenter
 
-## S3 - Lifecycle actions and services to list, create, and delete AWS S3 buckets
-https://github.com/grimmtheory/c3/tree/master/s3
+### [s3](https://github.com/grimmtheory/c3/tree/master/s3) :: AWS S3 management tools
 
-## EFS - Lifecycle actions and services to list, create, and delete AWS EFS file systems
-https://github.com/grimmtheory/c3/tree/master/efs
+### [EFS](https://github.com/grimmtheory/c3/tree/master/efs) :: AWS EFS management tools
 
-## RAP - Request Approval Process
-https://github.com/grimmtheory/c3/tree/master/rap
+### [rap](https://github.com/grimmtheory/c3/tree/master/rap) :: Request approval process service
