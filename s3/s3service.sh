@@ -107,7 +107,8 @@ configureAWSCli() {
 
 }
 
-agentSendLogMessage "Executing service script --  $cmd "
+print_log "Executing service script --  $cmd "
+echo "Executing service script --  $cmd "
 
 case $cmd in
 	install)
