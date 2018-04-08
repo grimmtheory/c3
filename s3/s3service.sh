@@ -107,8 +107,8 @@ configureAWSCli() {
 
 }
 
-print_log "Executing service script --  $cmd "
-echo "Executing service script --  $cmd "
+print_log "Executing service script --  $function "
+echo "Executing service script --  $function "
 
 case $cmd in
 	install)
