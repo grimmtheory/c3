@@ -2,19 +2,17 @@
 # Title		: s3-utils-ext-svc.sh
 # Description	: An external utility service for AWS s3 functions, e.g. list, create, and delete buckets.
 # Author	: jasgrimm
-# Date		: 2018-04-03
-# Version	: 0.1
+# Date		: 2018-04-10
+# Version	: 0.9
 # Usage		: bash s3-utils-ext-svc.sh $cmd (defaults to start), FUNCTION=$function < pulled in from service paramater passed
-# External Vars	: Read in at run time are $FUNCTION, $AWS_BUCKET_NAME, $AWS_REGION, $AWS_ACCESS_KEY_ID, $AWS_SECRET_ACCESS_KEY
-# Internal Vars	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
+# Inherited	: Read in at run time are $FUNCTION, $AWS_BUCKET_NAME, $AWS_REGION, $AWS_ACCESS_KEY_ID, $AWS_SECRET_ACCESS_KEY
+# Declared	: Initialized within srcipt - $AWS_INSTALL_DIR, $AWS_CONFIG_DIR, $AWS_CONFIG_FILE, $AWS_CRED_FILE
 
 # If running as an "external-service" (default)
 . /utils.sh
 
 # debug
-print_log "$(env)"
-print_log "$(env | grep -i cliqr)"
-print_log "$(env | grep -i ec2)"
+# print_log "$(env)"
 
 # Local variables
 PATH=$PATH:$AWS_INSTALL_DIR/bin
